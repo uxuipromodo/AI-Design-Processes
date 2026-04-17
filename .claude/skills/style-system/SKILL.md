@@ -26,20 +26,54 @@ This skill:
 
 Always run in planning mode.
 
+PHASE 0 — FONT AVAILABILITY CHECK
+
+This is a blocking prerequisite for all typography operations.
+
+Before typography extraction, typography normalization, or text style creation:
+
+- scan all text nodes in the current file
+- detect all used font families
+- detect all used styles or weights for each family
+- verify each detected font family and style is available in Plugin API runtime
+
+If any detected font is unavailable:
+
+stop execution immediately
+
+return:
+
+FONT_CHECK_FAILED
+
+list missing fonts in this format:
+
+Missing fonts:
+– {Font Family} / {Style}
+– {Font Family} / {Style}
+
+Do not substitute fallback fonts.
+
+Do not continue typography generation.
+
+Do not create text styles.
+
+Do not continue to later phases.
+
 Pipeline:
 
-1. Read all local text styles
-2. Read all local color styles
-3. Extract typography scale
-4. Extract grayscale palette
-5. Detect semantic colors
-6. Detect duplicates
-7. Detect near-duplicates
-8. Detect missing scale steps
-9. Propose normalized system
-10. Show preview
-11. Ask confirmation
-12. Apply changes only after approval
+1. Run font availability check on all text nodes
+2. Read all local text styles
+3. Read all local color styles
+4. Extract typography scale
+5. Extract grayscale palette
+6. Detect semantic colors
+7. Detect duplicates
+8. Detect near-duplicates
+9. Detect missing scale steps
+10. Propose normalized system
+11. Show preview
+12. Ask confirmation
+13. Apply changes only after approval
 
 
 # Typography System Rules

@@ -7,6 +7,40 @@ Treat detected text styles as signals of intent, not final system definitions.
 Always normalize extracted typography into semantic roles and canonical scale.
 
 
+# Font Availability Guard
+
+Typography extraction must not begin before font availability is verified.
+
+Before any classification or normalization:
+
+- scan text nodes in the current file
+- detect all used font families
+- detect all used styles or weights for each family
+- verify each detected font family and style is available in Plugin API runtime
+
+If any font is unavailable:
+
+stop immediately
+
+return:
+
+FONT_CHECK_FAILED
+
+list missing fonts in this format:
+
+Missing fonts:
+– {Font Family} / {Style}
+– {Font Family} / {Style}
+
+Do not use fallback fonts.
+
+Do not continue classification.
+
+Do not propose typography styles.
+
+Do not create text styles after a failed font check.
+
+
 # Extraction Targets
 
 Scan the layout and detect:
