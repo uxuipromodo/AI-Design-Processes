@@ -65,9 +65,9 @@ Example:
 
 Map to:
 
-Neutral / 700
-Neutral / 600
-Neutral / 500
+Color / Grey / 700
+Color / Grey / 600
+Color / Grey / 500
 
 
 Do not preserve raw grayscale values unless explicitly confirmed.
@@ -123,8 +123,8 @@ Prefer mapped neutral equivalents instead.
 
 Example:
 
-#000000 → Neutral / 800
-#FFFFFF → White
+#000000 → Color / Grey / 800
+#FFFFFF → Color / Grey / White
 
 
 Confirm before replacement.

@@ -18,32 +18,34 @@ Prefer predictable scales over preserving accidental gaps.
 
 # Typography Scale Extension
 
-Canonical typography scale:
+Typography extension uses a 2px step grid.
 
-10
-12
-14
-16
-18
-22
-24
-28
-32
+Any size divisible by 2px is canonical.
+
+Any size not divisible by 2px is non-canonical and must stop in planning mode before extension continues.
 
 
-When detected sizes partially match scale:
+Do not suggest missing values from a universal fixed list.
 
-snap detected values to nearest canonical steps.
+If detected typography already fits a coherent 2px rhythm:
+
+do not suggest unnecessary additions.
+
+
+When extension is needed:
+
+suggest only adjacent useful sizes based on semantic role range and real gaps.
 
 Example:
 
-23 → 24
-27 → 28
+If Heading / 32 exists:
+
+30 or 34 may be valid only if neighboring heading steps are needed.
 
 
-If canonical steps missing:
+If Body / 16 exists:
 
-propose adding them.
+14 or 18 may be valid only if surrounding body roles require them.
 
 
 Example:
@@ -55,12 +57,10 @@ Detected:
 18
 32
 
-Missing:
+Suggest only if context requires:
 
-12
-22
-24
-28
+20 for subheading continuity
+30 for heading continuity
 
 
 Ask confirmation before creation.
@@ -77,7 +77,7 @@ Example:
 Suggest:
 
 18
-22
+20
 
 
 Never insert steps automatically.
@@ -112,8 +112,8 @@ If Heading / 32 exists:
 
 suggest:
 
-Heading / 28
-Heading / 24
+Heading / 30
+Heading / 34
 
 
 If Body / 16 exists:

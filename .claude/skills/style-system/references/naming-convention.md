@@ -24,9 +24,9 @@ Example:
 
 Correct:
 
-Text / Heading / 32
-Text / Body / 16
-Color / Neutral / 500
+Text / Heading / 32 / Semibold
+Text / Body / 16 / Regular
+Color / Grey / 500
 
 Incorrect:
 
@@ -40,7 +40,7 @@ Blue 2
 
 Format:
 
-Text / Role / Size
+Text / Role / Size / Weight
 
 
 Roles:
@@ -53,16 +53,16 @@ Label
 
 Examples:
 
-Text / Heading / 32
-Text / Heading / 24
+Text / Heading / 32 / Semibold
+Text / Heading / 24 / Semibold
 
-Text / Body / 16
-Text / Body / 14
+Text / Body / 16 / Regular
+Text / Body / 14 / Regular
 
-Text / Action / 16
+Text / Action / 16 / Medium
 
-Text / Label / 12
-Text / Label / 10
+Text / Label / 12 / Medium
+Text / Label / 10 / Medium
 
 
 Never skip role classification.
@@ -77,8 +77,8 @@ separate style namespaces per family
 
 Example:
 
-Text / UI / Heading / 32
-Text / Editorial / Heading / 32
+Text / UI / Heading / 32 / Semibold
+Text / Editorial / Heading / 32 / Semibold
 
 
 Do not merge typography systems across font families automatically.
@@ -89,31 +89,17 @@ Ask confirmation before consolidation.
 
 # Weight Handling Policy
 
-Weight must not appear in name unless required.
+Weight must appear in typography style names.
+
+Use real weight labels when available:
+
+Regular
+Medium
+Semibold
+Bold
 
 
-Correct:
-
-Text / Heading / 32
-
-
-Not preferred:
-
-Text / Heading / 32 / Bold
-
-
-Exception:
-
-If two styles share same role and size but differ in weight.
-
-
-Example:
-
-Text / Heading / 32 / Medium
-Text / Heading / 32 / Bold
-
-
-Ask confirmation before generating weight suffix.
+Do not use numeric weight values in style names unless unavoidable.
 
 
 # Line Height Naming Policy
@@ -152,15 +138,16 @@ Ask confirmation before suffix creation.
 
 Format:
 
-Color / Neutral / Step
+Color / Grey / Step
 
 
 Examples:
 
-Color / Neutral / 50
-Color / Neutral / 100
-Color / Neutral / 500
-Color / Neutral / 800
+Color / Grey / White
+Color / Grey / 50
+Color / Grey / 100
+Color / Grey / 500
+Color / Grey / 800
 
 
 Do not use:

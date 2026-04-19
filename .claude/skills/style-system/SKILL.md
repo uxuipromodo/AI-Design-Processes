@@ -83,17 +83,28 @@ Base rhythm:
 2px
 
 
-Canonical typography scale:
+Typography uses a 2px step grid.
 
+Any font size divisible by 2px is canonical.
+
+Any font size not divisible by 2px is non-canonical.
+
+Canonical examples:
+
+4
+6
+8
 10
 12
 14
 16
 18
-22
+20
 24
-28
 32
+40
+48
+64
 
 
 Role mapping:
@@ -115,14 +126,31 @@ Label
 Do not generate purely numeric text styles unless classification is ambiguous.
 
 
-If detected typography sizes are near each other:
+# Non-Canonical Text Size Rule
 
-cluster to nearest approved step
+If a detected text size is not divisible by 2px:
+
+do not normalize automatically
+
+do not snap silently
+
+do not assign a final style automatically
+
+Stop in planning mode and show:
+
+Detected non-canonical text size: {size}px
+
+Possible mapping:
+- {nearest lower canonical step}
+- {nearest higher canonical step}
+- keep as custom
+
+Choose target role and size before continuing.
 
 
 If scale steps are missing:
 
-propose extension
+propose contextual extension only when role structure requires it
 
 
 Example:
@@ -137,9 +165,8 @@ Detected:
 Proposed:
 
 12
-22
-24
-28
+20
+30
 
 Ask confirmation before creation.
 
@@ -213,9 +240,9 @@ Detected:
 
 Propose mapping into:
 
-Color / Neutral / 700
-Color / Neutral / 600
-Color / Neutral / 500
+Color / Grey / 700
+Color / Grey / 600
+Color / Grey / 500
 
 
 Ask confirmation before applying.
@@ -293,15 +320,17 @@ Offer adjustment suggestions.
 
 Text styles:
 
-Text / Heading / {size}
-Text / Body / {size}
-Text / Action / {size}
-Text / Label / {size}
+Text / Heading / {size} / {weight}
+Text / Body / {size} / {weight}
+Text / Action / {size} / {weight}
+Text / Label / {size} / {weight}
 
 
 Color styles:
 
-Color / Neutral / {step}
+Color / Grey / White
+
+Color / Grey / {step}
 
 Color / Semantic / Success
 Color / Semantic / Error

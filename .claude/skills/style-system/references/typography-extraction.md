@@ -71,6 +71,15 @@ Label
 Do not assign numeric-only styles unless role detection fails.
 
 
+Semantic role ranges guide classification but do not override layout context:
+
+8–12 → Caption / Label / Microcopy
+14–18 → Body / UI text
+20–24 → Subheading / Intermediate heading
+28–40 → Heading
+48+ → Display
+
+
 # Heading Detection
 
 Classify as Heading if:
@@ -92,9 +101,9 @@ visually separated by spacing above/below
 
 Prefer semantic grouping:
 
-Heading / 32
-Heading / 28
-Heading / 24
+Text / Heading / 32 / Semibold
+Text / Heading / 28 / Semibold
+Text / Heading / 24 / Semibold
 
 
 Avoid creating excessive heading levels unless layout clearly requires them.
@@ -154,8 +163,8 @@ short text length
 
 Example:
 
-Action / 14
-Action / 16
+Text / Action / 14 / Medium
+Text / Action / 16 / Medium
 
 
 # Label Detection
@@ -180,8 +189,8 @@ Often uppercase or semi-condensed.
 
 Example:
 
-Label / 10
-Label / 12
+Text / Label / 10 / Medium
+Text / Label / 12 / Medium
 
 
 # Size Clustering Rules
@@ -194,9 +203,9 @@ Example:
 32
 30
 
-Normalize:
+If all sizes are divisible by 2px:
 
-32
+treat them as canonical candidates
 
 
 Example:
@@ -204,9 +213,16 @@ Example:
 15
 16
 
-Normalize:
+Do not normalize automatically.
 
-16
+Show in planning mode:
+
+Detected non-canonical text size: 15px
+
+Possible mapping:
+- 14
+- 16
+- keep as custom
 
 
 Ask confirmation before merging clusters.
@@ -214,31 +230,49 @@ Ask confirmation before merging clusters.
 
 # Canonical Scale Alignment
 
-Project typography scale:
+Typography uses a 2px step grid.
 
+Any detected size divisible by 2px is canonical.
+
+Any detected size not divisible by 2px is non-canonical.
+
+
+Canonical examples:
+
+4
+6
+8
 10
 12
 14
 16
 18
-22
+20
 24
-28
 32
+40
+48
+64
 
 
-When detected sizes fall between steps:
+When detected sizes are not divisible by 2px:
 
-snap to nearest canonical size
+do not snap silently
 
-
-Example:
-
-23 → 24
-27 → 28
+do not assign a final style automatically
 
 
-Confirm before applying normalization.
+Show in planning mode:
+
+Detected non-canonical text size: {size}px
+
+Possible mapping:
+- {nearest lower canonical step}
+- {nearest higher canonical step}
+- keep as custom
+
+
+Choose target role and size before continuing.
 
 
 # Frequency-Based Priority
@@ -393,7 +427,7 @@ Text / Role / Size
 
 Example:
 
-Text / Heading / 32
-Text / Body / 16
-Text / Action / 14
-Text / Label / 10
+Text / Heading / 32 / Semibold
+Text / Body / 16 / Regular
+Text / Action / 14 / Medium
+Text / Label / 10 / Medium
