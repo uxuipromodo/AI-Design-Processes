@@ -76,6 +76,53 @@ Pipeline:
 13. Apply changes only after approval
 
 
+FINAL PHASE — CREATE / APPLY STYLES TO FILE
+
+After planning-mode confirmation, the skill may:
+
+1. Create normalized text styles
+2. Create normalized color styles
+3. Apply created styles back to matching nodes in the file
+
+
+Supported output modes:
+
+- Analyze only
+- Create styles only
+- Create and apply styles
+
+
+Rules:
+
+- default mode remains planning mode first
+- no styles are created before confirmation
+- no styles are applied before confirmation
+- in Create styles only mode, create styles but do not bind them to nodes
+- in Create and apply styles mode, create styles and apply them to matching text and color nodes in the file
+- the final step may include optional rebinding or application to the file, not only style generation
+
+
+# Audit Mode
+
+The style-system skill supports a structured audit-mode workflow.
+
+Audit behavior is defined in:
+
+references/audit-principles.md
+
+Audit mode:
+
+- detects style inconsistencies
+- reports structured issues
+- assigns severity levels
+- suggests normalization options
+- requires designer confirmation
+- performs a final validation pass
+- only then allows style creation or application
+
+Audit mode never modifies styles or layout before confirmation.
+
+
 # Typography System Rules
 
 Base rhythm:
@@ -240,9 +287,9 @@ Detected:
 
 Propose mapping into:
 
-Color / Grey / 700
-Color / Grey / 600
-Color / Grey / 500
+Color / Neutral / Gray 700
+Color / Neutral / Gray 600
+Color / Neutral / Gray 500
 
 
 Ask confirmation before applying.
@@ -320,17 +367,17 @@ Offer adjustment suggestions.
 
 Text styles:
 
-Text / Heading / {size} / {weight}
-Text / Body / {size} / {weight}
-Text / Action / {size} / {weight}
-Text / Label / {size} / {weight}
+Text / Heading / {weight} {size}/{line-height}
+Text / Body / {weight} {size}/{line-height}
+Text / Action / {weight} {size}/{line-height}
+Text / Label / {weight} {size}/{line-height}
 
 
 Color styles:
 
-Color / Grey / White
+Color / Neutral / White
 
-Color / Grey / {step}
+Color / Neutral / Gray {step}
 
 Color / Semantic / Success
 Color / Semantic / Error

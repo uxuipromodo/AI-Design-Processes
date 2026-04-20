@@ -24,9 +24,9 @@ Example:
 
 Correct:
 
-Text / Heading / 32 / Semibold
-Text / Body / 16 / Regular
-Color / Grey / 500
+Text / Heading / Semibold 32/110
+Text / Body / Regular 16/150
+Color / Neutral / Gray 500
 
 Incorrect:
 
@@ -40,7 +40,7 @@ Blue 2
 
 Format:
 
-Text / Role / Size / Weight
+Text / Role / Weight Size/LineHeight
 
 
 Roles:
@@ -53,19 +53,34 @@ Label
 
 Examples:
 
-Text / Heading / 32 / Semibold
-Text / Heading / 24 / Semibold
+Text / Heading / Semibold 32/110
+Text / Heading / Semibold 24/120
 
-Text / Body / 16 / Regular
-Text / Body / 14 / Regular
+Text / Body / Regular 16/150
+Text / Body / Regular 14/150
 
-Text / Action / 16 / Medium
+Text / Action / Medium 16/120
 
-Text / Label / 12 / Medium
-Text / Label / 10 / Medium
+Text / Label / Medium 12/100
+Text / Label / Medium 10/100
 
 
 Never skip role classification.
+
+
+Keep size and line-height in the final visible segment.
+
+Do not create extra slash nesting for size.
+
+Use integer values in the visible name.
+
+Represent line-height as percentage-style shorthand derived from the style definition.
+
+
+Example:
+
+14 with 150% line-height → 14/150
+32 with 110% line-height → 32/110
 
 
 # Multi-Font Naming Rules
@@ -77,8 +92,8 @@ separate style namespaces per family
 
 Example:
 
-Text / UI / Heading / 32 / Semibold
-Text / Editorial / Heading / 32 / Semibold
+Text / UI / Heading / Semibold 32/110
+Text / Editorial / Heading / Semibold 32/110
 
 
 Do not merge typography systems across font families automatically.
@@ -104,18 +119,15 @@ Do not use numeric weight values in style names unless unavoidable.
 
 # Line Height Naming Policy
 
-Do not include line-height in style name unless multiple variants exist.
+Line-height must appear in the final visible typography style name.
+
+Keep line-height in the last segment together with size.
 
 
-Example allowed:
+Examples:
 
-Text / Body / 16 / Dense
-Text / Body / 16 / Relaxed
-
-
-Otherwise:
-
-omit line-height suffix.
+Text / Body / Regular 16/150
+Text / Heading / Semibold 32/110
 
 
 # Letter Spacing Naming Policy
@@ -138,16 +150,16 @@ Ask confirmation before suffix creation.
 
 Format:
 
-Color / Grey / Step
+Color / Neutral / Gray Step
 
 
 Examples:
 
-Color / Grey / White
-Color / Grey / 50
-Color / Grey / 100
-Color / Grey / 500
-Color / Grey / 800
+Color / Neutral / White
+Color / Neutral / Gray 50
+Color / Neutral / Gray 100
+Color / Neutral / Gray 500
+Color / Neutral / Gray 800
 
 
 Do not use:

@@ -41,6 +41,15 @@ Do not propose typography styles.
 Do not create text styles after a failed font check.
 
 
+Typography audit behavior is governed by:
+
+references/audit-principles.md
+
+Extraction must not normalize typography automatically during audit mode.
+
+Non-canonical typography must follow the planning-mode confirmation workflow defined in audit-principles.md.
+
+
 # Extraction Targets
 
 Scan the layout and detect:
@@ -101,9 +110,9 @@ visually separated by spacing above/below
 
 Prefer semantic grouping:
 
-Text / Heading / 32 / Semibold
-Text / Heading / 28 / Semibold
-Text / Heading / 24 / Semibold
+Text / Heading / Semibold 32/110
+Text / Heading / Semibold 28/110
+Text / Heading / Semibold 24/120
 
 
 Avoid creating excessive heading levels unless layout clearly requires them.
@@ -163,8 +172,8 @@ short text length
 
 Example:
 
-Text / Action / 14 / Medium
-Text / Action / 16 / Medium
+Text / Action / Medium 14/120
+Text / Action / Medium 16/120
 
 
 # Label Detection
@@ -189,8 +198,8 @@ Often uppercase or semi-condensed.
 
 Example:
 
-Text / Label / 10 / Medium
-Text / Label / 12 / Medium
+Text / Label / Medium 10/100
+Text / Label / Medium 12/100
 
 
 # Size Clustering Rules
@@ -427,7 +436,7 @@ Text / Role / Size
 
 Example:
 
-Text / Heading / 32 / Semibold
-Text / Body / 16 / Regular
-Text / Action / 14 / Medium
-Text / Label / 10 / Medium
+Text / Heading / Semibold 32/110
+Text / Body / Regular 16/150
+Text / Action / Medium 14/120
+Text / Label / Medium 10/100

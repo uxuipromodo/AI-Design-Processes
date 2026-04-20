@@ -7,6 +7,15 @@ Treat detected colors as signals, not final palette definitions.
 Always normalize colors into system layers before style creation.
 
 
+Color audit behavior follows:
+
+references/audit-principles.md
+
+Extraction must not normalize colors automatically during audit mode.
+
+Palette normalization requires confirmation as defined in audit-principles.md.
+
+
 # Extraction Targets
 
 Scan the layout and detect:
@@ -65,9 +74,9 @@ Example:
 
 Map to:
 
-Color / Grey / 700
-Color / Grey / 600
-Color / Grey / 500
+Color / Neutral / Gray 700
+Color / Neutral / Gray 600
+Color / Neutral / Gray 500
 
 
 Do not preserve raw grayscale values unless explicitly confirmed.
@@ -123,8 +132,8 @@ Prefer mapped neutral equivalents instead.
 
 Example:
 
-#000000 → Color / Grey / 800
-#FFFFFF → Color / Grey / White
+#000000 → Color / Neutral / Gray 800
+#FFFFFF → Color / Neutral / White
 
 
 Confirm before replacement.
