@@ -1,43 +1,327 @@
 # Variables Architecture Reference
 
-TODO: fill in v1 content.
+This document defines the structural model of the variable system used inside the Full Variables Skill.
 
-# 1. Token hierarchy
+It establishes the hierarchy, naming logic, aliasing rules, and decision criteria for creating, extending, and maintaining variables in Figma.
 
-TODO: fill in v1 content.
 
-# 2. Primitive layer
+## 1. Token hierarchy
 
-TODO: fill in v1 content.
+The variable system follows a three-layer structure:
 
-# 3. Semantic layer
+1. Primitive layer
+2. Semantic layer
+3. Component-specific layer
 
-TODO: fill in v1 content.
+Hierarchy direction:
 
-# 4. Component-specific layer
+primitive → semantic → component
 
-TODO: fill in v1 content.
+Only semantic and component variables should be applied to UI layouts.
 
-# 5. Alias strategy
+Primitive variables must never be applied directly to components or screens.
 
-TODO: fill in v1 content.
 
-# 6. Collection structure
+## 2. Primitive layer
 
-TODO: fill in v1 content.
+Primitive variables define raw visual values.
 
-# 7. Naming conventions
+Examples:
 
-TODO: fill in v1 content.
+color/blue/500
+color/gray/100
+spacing/4
+spacing/8
+radius/4
+opacity/40
 
-# 8. State expansion rules
+Primitive variables:
 
-TODO: fill in v1 content.
+- represent absolute values
+- never describe purpose
+- never include states
+- never reference components
+- are used only as alias sources
 
-# 9. When to create a new semantic variable
+Primitive variables must remain stable and reusable across the entire system.
 
-TODO: fill in v1 content.
 
-# 10. Minimum semantic variable set
+## 3. Semantic layer
 
-TODO: fill in v1 content.
+Semantic variables define meaning and usage context.
+
+Examples:
+
+color/background/default
+color/background/subtle
+color/text/default
+color/text/muted
+color/border/default
+color/border/focus
+
+Semantic variables must:
+
+- reference primitive variables
+- describe intent instead of appearance
+- remain component-independent
+- support state extensions if needed
+
+Example:
+
+color/text/default → color/gray/900
+
+
+## 4. Component-specific layer
+
+Component-specific variables define behavior inside UI components.
+
+Examples:
+
+button/background/default
+button/background/hover
+button/text/default
+input/border/focus
+card/background/default
+
+Component variables must:
+
+- reference semantic variables
+- never reference primitives directly
+- remain scoped to a component context
+
+Example:
+
+button/background/default → color/background/default
+
+
+## 5. Alias strategy
+
+Aliasing must always follow this direction:
+
+primitive → semantic → component
+
+Never allow:
+
+component → primitive
+semantic → component
+
+Correct example:
+
+color/gray/900
+→ color/text/default
+→ button/text/default
+
+
+## 6. Collection structure
+
+Variables must be grouped into logical collections.
+
+Recommended structure:
+
+Primitives
+Semantics
+Components
+
+Alternative allowed structure:
+
+Color primitives
+Spacing primitives
+Radius primitives
+Semantic colors
+Semantic spacing
+Component variables
+
+Collections must reflect system scale and team workflow complexity.
+
+
+## 7. Naming conventions
+
+Variables must follow slash-based hierarchical naming:
+
+category/type/role/state
+
+Examples:
+
+color/background/default
+color/background/hover
+spacing/container/padding
+radius/button/default
+
+Naming must:
+
+- be lowercase
+- avoid appearance-based wording
+- avoid raw color names inside semantic layer
+- avoid component references inside semantic layer
+
+
+## 8. State expansion rules
+
+State suffixes must be added only when interaction requires them.
+
+Allowed states:
+
+default
+hover
+active
+focus
+disabled
+pressed
+selected
+
+Example:
+
+button/background/default
+button/background/hover
+button/background/pressed
+
+Avoid creating unnecessary states.
+
+
+## 9. When to create a new semantic variable
+
+Create a new semantic variable if:
+
+multiple components reuse the same intent
+
+Example:
+
+card background
+modal background
+dropdown background
+
+Should become:
+
+color/background/surface
+
+
+Create component-specific variables if:
+
+the value applies to only one component
+
+Example:
+
+button/destructive/background
+
+
+## 10. Minimum semantic variable set
+
+Each system should define at least:
+
+color/background/default
+color/background/subtle
+color/background/surface
+
+color/text/default
+color/text/muted
+color/text-inverse/default
+
+color/border/default
+color/border/subtle
+color/border/focus
+
+color/fill/primary
+color/fill/secondary
+color/fill/destructive
+
+spacing/container/padding
+spacing/component/gap
+
+radius/component/default
+radius/container/default
+
+
+## 11. Styles interaction model
+
+Styles may exist during early project stages.
+
+Variables become the final source of truth during system stabilization.
+
+Migration flow:
+
+styles → semantic variables → component variables
+
+When styles exist:
+
+they should be used as extraction sources
+
+When variables exist:
+
+styles must not duplicate variable logic
+
+
+## 12. Direct primitive usage exceptions
+
+Primitive variables may be applied directly only if:
+
+the system is in early exploration stage
+or semantic structure is not yet defined
+
+This usage must be temporary.
+
+
+## 13. Component isolation principle
+
+Component variables must never leak outside their component scope.
+
+Example:
+
+button/background/default
+
+must not be reused by:
+
+card
+modal
+tooltip
+
+Instead:
+
+create semantic aliases if reuse emerges.
+
+
+## 14. Variable creation decision tree
+
+When introducing a new variable:
+
+Step 1:
+
+Check whether a semantic variable already exists
+
+Step 2:
+
+If reused across components → create semantic variable
+
+Step 3:
+
+If scoped to one component → create component variable
+
+Step 4:
+
+If raw value only → create primitive variable
+
+
+## 15. Anti-patterns
+
+Avoid:
+
+semantic variables referencing semantic variables unnecessarily
+
+component variables referencing primitives
+
+appearance-based semantic names
+
+example:
+
+color/blue-primary
+color/light-gray-border
+
+
+## 16. System stability rule
+
+Primitive layer changes are high-risk
+
+Semantic layer changes are medium-risk
+
+Component layer changes are low-risk
+
+Always modify the lowest-impact layer possible.
