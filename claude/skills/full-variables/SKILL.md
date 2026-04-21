@@ -147,15 +147,22 @@ The skill determines workflow from user instruction.
 
 If the request is:
 
-create variables → build semantic structure
+create variables → treat as a multi-phase flow:
+analysis → structure proposal → confirmation → variable creation → apply review → apply confirmation if needed → apply to layouts
 
-audit variables → analyze only
+create variables from styles → treat as a multi-phase flow:
+style inspection → semantic mapping proposal → confirmation → variable creation → apply review → apply confirmation if needed → apply to layouts
 
-apply variables → map variables to layout
+audit variables → analyze only and return findings
 
-extend variables → add missing roles
+apply variables → map existing variables to layouts without rebuilding the system unless required
 
-rebuild variables → replace structure if confirmed
+extend variables → add missing roles without rebuilding unrelated parts
+
+rebuild variables → replace structure only if the user explicitly requests rebuild or confirms destructive changes
+
+For create-related intents, variable creation is not the final phase.
+The task remains active until apply is resolved.
 
 ## 12. Audit scopes
 
@@ -181,11 +188,19 @@ Apply workflow follows this order:
 
 replace hardcoded values
 
-replace duplicated styles
+replace duplicated styles where variable mapping is intended
 
 normalize semantic bindings
 
 introduce component variables if needed
+
+After variables are created, the skill must explicitly transition into apply review.
+
+If applying variables may broadly affect existing layouts, styles, or bindings, the skill must request confirmation before applying.
+
+If the user instruction already clearly implies full creation and application, the skill may continue directly into apply.
+
+A create-related task is not complete until apply is executed or explicitly declined.
 
 ## 14. Decision rules for new variables
 
@@ -225,7 +240,35 @@ apply sequences
 
 migration guidance when required
 
-## 17. Destructive change policy
+After each major phase, the skill must state the current status and the next expected step.
+
+After variable creation, the skill must explicitly say one of the following:
+
+variables created, next step is apply
+
+apply confirmed, proceeding to layout application
+
+apply was declined, task ends after creation
+
+The skill must never silently stop after creation if apply is still expected.
+
+## 17. Phase completion rules
+
+For audit-only intents, the task may end after findings are returned.
+
+For create-related intents, the task must continue until apply is resolved.
+
+“Apply resolved” means one of:
+
+variables were applied
+
+the user explicitly declined apply
+
+the user requested creation only, without apply
+
+The skill must never silently stop after variable creation if apply is the expected final phase.
+
+## 18. Destructive change policy
 
 The skill must not:
 
@@ -237,7 +280,7 @@ rebuild collections
 
 unless explicitly requested by the user.
 
-## 18. Exclusions and limits in v1
+## 19. Exclusions and limits in v1
 
 This skill does not:
 
@@ -249,7 +292,7 @@ rebuild token hierarchies without confirmation
 
 modify primitives unless required
 
-## 19. Reference files
+## 20. Reference files
 
 See:
 
