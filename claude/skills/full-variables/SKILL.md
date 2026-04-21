@@ -1,5 +1,5 @@
 ---
-name: full-variables-skill
+name: full-variables
 description: Skill for creating, auditing, extending, and applying Figma variables using a structured token architecture based on primitives, semantics, and component-level roles.
 ---
 
