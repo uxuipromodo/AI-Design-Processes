@@ -27,9 +27,31 @@ background surfaces
 overlay colors
 accent colors
 semantic colors
+effect colors when present and relevant
 
 
 Group colors by usage role before naming.
+
+
+Build the audit color universe from:
+
+1. all styles that exist
+2. all actual color values found on nodes
+
+
+Color extraction must be node-driven and style-aware.
+
+Always scan:
+
+- local paint styles
+- imported or foreign style-bound paints present on nodes
+- raw fills
+- raw strokes
+- text fills
+- effect colors when present and relevant
+
+
+Do not skip a color only because it is not wrapped in a local style.
 
 
 # Color System Layers
@@ -299,6 +321,53 @@ report before applying palette.
 
 
 Offer adjustment suggestions.
+
+
+# Apply Safety Rules
+
+Apply color styles only to nodes that already contain a semantically valid SOLID fill.
+
+Do not apply background color styles to nodes whose fill type is:
+
+IMAGE
+GRADIENT
+VIDEO
+any non-solid paint
+mixed or multi-fill nodes unless explicitly confirmed
+
+
+Never add a new background fill to structural nodes automatically.
+
+Skip by default:
+
+auto-layout wrappers used only for grouping or layout
+section wrapper frames
+footer column wrappers
+container frames used only for structure
+logo containers
+icon containers
+vector-only containers
+
+
+Never apply background color styles automatically to:
+
+VECTOR nodes
+BOOLEAN_OPERATION nodes
+GROUP nodes
+frames whose children are only vectors or icons
+nodes whose names indicate logo or icon if such naming exists
+
+
+If a node contains an IMAGE fill, preserve it unchanged.
+
+Auto-layout frames must not receive background color styles unless they already had an intentional solid fill before normalization.
+
+This includes:
+
+footer section wrappers
+header or menu grouping wrappers
+nested content grouping frames
+structural auto-layout frames that exist only to organize children
 
 
 # Surface Role Detection

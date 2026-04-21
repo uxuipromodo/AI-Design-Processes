@@ -253,6 +253,62 @@ Build color styles in layers:
 Always normalize Neutral palette first.
 
 
+Color audit must be node-driven and style-aware.
+
+Build the audit color universe from:
+
+1. all styles that exist
+2. all actual color values found on nodes
+
+
+Always scan:
+
+- local paint styles
+- imported or foreign style-bound paints present on nodes
+- raw fills
+- raw strokes
+- text fills
+- effect colors when present and relevant
+
+
+Do not skip a color only because it is not wrapped in a local style.
+
+
+Automatic color application is restricted to semantically valid solid-fill targets only.
+
+Apply color styles only to nodes that already contain an intentional SOLID fill.
+
+Do not apply background color styles to IMAGE, GRADIENT, VIDEO, or any other non-solid paints.
+
+Do not apply background color styles to mixed or multi-fill nodes unless explicitly confirmed.
+
+Do not add new background fills to structural nodes automatically.
+
+Skip by default:
+
+- structural auto-layout wrappers
+- section wrapper frames
+- footer column wrappers
+- structural container frames
+- logo containers
+- icon containers
+- vector-only containers
+
+
+Never apply background color styles automatically to:
+
+- VECTOR nodes
+- BOOLEAN_OPERATION nodes
+- GROUP nodes
+- frames whose children are only vectors or icons
+- nodes whose names indicate logo or icon when such naming exists
+
+
+Preserve image-bearing nodes unchanged.
+
+Auto-layout frames must not receive background color styles unless they already had an intentional solid fill before normalization.
+
+
 # Neutral Palette Template
 
 Merge detected grayscale with baseline template:
