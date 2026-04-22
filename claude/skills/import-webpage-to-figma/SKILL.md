@@ -56,6 +56,23 @@ Capture each viewport **one at a time**. Never start the next viewport until the
 2. Report to the user: which frames were imported, their names, and confirm success
 3. If a frame is missing — retry that viewport once
 
+## State capture (optional)
+
+If the user adds `State:` to the prompt — perform that interaction in Playwright before capture.
+
+Supported states:
+- `open mobile menu` → find and click the burger/hamburger button
+- `open desktop menu` → find and click the main navigation trigger
+- `open filters` → find and click the filters button
+- `open modal` → find and trigger the modal
+- `open dropdown` → find and click the dropdown trigger
+- `open search` → find and click the search button
+
+Rules for state capture:
+- Always wait for the triggered UI element to fully appear before capture
+- Only perform the requested interaction — do not click anything else
+- If the trigger element is not found — report failure and do not capture
+
 ## Rules
 
 - Never capture two viewports at the same time
