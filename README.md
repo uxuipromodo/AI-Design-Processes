@@ -60,7 +60,23 @@ claude mcp add --scope user --transport http figma https://mcp.figma.com/mcp
 
 ---
 
-## Крок 3 — Встановити skills
+## Крок 3 — Увімкнути MCP сервер у Figma Desktop
+
+Щоб Claude бачив твій Figma файл, потрібно увімкнути вбудований MCP сервер прямо у Figma Desktop.
+
+**1.** Відкрий будь-який файл у **Figma Desktop**
+
+**2.** Натисни `Shift + D` — відкриється Dev Mode
+
+**3.** У правій панелі знайди розділ **MCP server** і натисни **Enable desktop MCP server**
+
+**4.** Server status зміниться на **Enabled** — сервер запущено
+
+> Цей сервер потрібно вмикати щоразу коли працюєш з Claude. Він активний поки відкритий Figma Desktop з файлом.
+
+---
+
+## Крок 4 — Встановити skills
 
 Одна команда в терміналі:
 
