@@ -2,6 +2,36 @@
 
 Цей репозиторій містить набір skills для роботи з Figma через Claude Code та MCP workflows.
 
+---
+
+## Встановлення (для нових учасників)
+
+**Крок 1.** Клонуй репозиторій у будь-яке зручне місце:
+
+```bash
+git clone https://github.com/uxuipromodo/AI-Design-Processes.git
+```
+
+**Крок 2.** Запусти інсталятор:
+
+```bash
+bash AI-Design-Processes/install.sh
+```
+
+Скрипт автоматично:
+- встановить всі скіли в `~/.claude/skills/`
+- налаштує автооновлення при кожному старті Claude Code
+
+**Потребує:** Claude Code встановленого на машині → [claude.ai/download](https://claude.ai/download)
+
+**Оновлення вручну** (якщо потрібно не чекати наступного старту):
+
+```bash
+bash ~/.claude/sync-skills.sh
+```
+
+---
+
 Skills описують структуровані підходи до:
 
 - extraction стилів із layout
