@@ -4,6 +4,23 @@
 
 ---
 
+## Структура репозиторію
+
+```
+AI Design Processes/
+├── .claude/
+│   └── settings.json          # Project-level MCP конфігурація (Playwright)
+├── claude/
+│   └── skills/
+│       ├── style-system/      # Extraction стилів із layout
+│       ├── full-variables/    # Побудова variables-архітектури
+│       └── import-webpage-to-figma/  # Імпорт вебсторінок у Figma
+├── install.sh                 # Скрипт встановлення skills
+└── README.md
+```
+
+---
+
 ## Встановлення
 
 Одна команда в терміналі — більше нічого не потрібно:
@@ -24,6 +41,40 @@ git clone https://github.com/uxuipromodo/AI-Design-Processes.git /tmp/ai-skills 
 ```bash
 bash ~/.claude/sync-skills.sh
 ```
+
+---
+
+## Автоматична активація Playwright MCP
+
+У репозиторії є файл `.claude/settings.json` — це project-level конфігурація Claude Code.
+
+**Як це працює:**
+
+Claude Code при кожному старті шукає `.claude/settings.json` у поточній директорії проєкту. Якщо знаходить — автоматично підключає всі MCP сервери, описані в `mcpServers`, без будь-яких дій з боку користувача.
+
+Тобто достатньо склонувати цей репозиторій і відкрити його в Claude Code — Playwright MCP буде активний одразу.
+
+```json
+// .claude/settings.json
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
+    }
+  }
+}
+```
+
+Playwright MCP потрібен для скіла `import-webpage-to-figma` — він відкриває браузер, завантажує сторінку і передає знімок у Figma. Без нього скіл не працює.
+
+**Що відбувається під капотом:**
+1. Claude Code читає `.claude/settings.json` при старті сесії
+2. Запускає `npx @playwright/mcp@latest` як локальний MCP сервер
+3. Claude отримує інструменти керування браузером (`browser_navigate`, `browser_snapshot` тощо)
+4. Скіл `import-webpage-to-figma` використовує ці інструменти для захоплення вебсторінки
+
+Конфігурація діє лише в межах цього репозиторію і не змінює глобальні налаштування Claude Code на машині.
 
 ---
 
