@@ -30,24 +30,36 @@ Viewports: Desktop 1440, Mobile 390
 
 ## Execution
 
-For each requested viewport, in order:
+Capture each viewport **one at a time**. Never start the next viewport until the current one is fully complete.
 
-1. Call `generate_figma_design` with the site URL and Figma file key
-2. Set viewport width exactly as specified by the user
-3. Wait for page to fully load before capture
-4. Import the captured frame into the Figma file
-5. Name the frame: `[Device] [Width]` — for example `Desktop 1440`, `Mobile 390`
+### For each viewport — follow these steps exactly:
 
-Repeat for every viewport in the same run.
+**Step 1.** Call `generate_figma_design` with the site URL and Figma file key. Receive one captureId. Do not call `generate_figma_design` again until this viewport is fully done.
 
-## After all frames are imported
+**Step 2.** Open the site in Playwright at the exact viewport width specified by the user.
+
+**Step 3.** Wait for the page to fully load and stabilize.
+
+**Step 4.** Inject the capture script and call `captureForDesign()`.
+
+**Step 5.** Poll every 5 seconds until status is `"completed"`. Do not proceed until `"completed"` is received.
+
+**Step 6.** Close the Playwright session completely.
+
+**Step 7.** Name the imported frame: `Desktop 1366`, `Mobile 360` — always include device type and exact pixel width.
+
+**Step 8.** Only after Step 7 is confirmed — start the next viewport from Step 1.
+
+### After all viewports are done:
 
 1. Call `use_figma` to verify all requested frames are present in the Figma file
-2. Report to the user which frames were successfully imported with their names
-3. If a frame is missing — retry that viewport once before reporting failure
+2. Report to the user: which frames were imported, their names, and confirm success
+3. If a frame is missing — retry that viewport once
 
 ## Rules
 
+- Never capture two viewports at the same time
+- Never call `generate_figma_design` for viewport 2 before viewport 1 is fully complete
 - Never skip a requested viewport
 - Never add viewports the user did not request
 - Never perform design cleanup, component creation, auto layout, or layer renaming
