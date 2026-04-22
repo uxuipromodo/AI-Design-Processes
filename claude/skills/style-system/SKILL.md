@@ -71,9 +71,14 @@ Pipeline:
 8. Detect near-duplicates
 9. Detect missing scale steps
 10. Propose normalized system
+10a. MANDATORY — before proposing any new style:
+     - map every existing style to its normalized target name
+     - if an existing style covers a role → rename it, do not create a new one
+     - only mark a slot as "missing" if no existing style can fill it after renaming
+     - show the full rename/merge/create plan in the preview
 11. Show preview
 12. Ask confirmation
-13. Apply changes only after approval
+13. Apply changes only after approval — in order: rename → merge → delete → create → apply to nodes
 
 
 FINAL PHASE — CREATE / APPLY STYLES TO FILE

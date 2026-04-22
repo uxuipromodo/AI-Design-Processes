@@ -296,16 +296,32 @@ Heading Large
 Body Text
 Gray Dark
 Primary Blue
+H1, H2, H3, H4, H5
+Button
+Helper 1, Helper 2
+Body text
 
 
-Propose normalized replacements.
+Renaming existing styles is ALWAYS the first action — before creating any new style.
 
+MANDATORY order:
+1. Build a complete map of existing styles → their normalized target names
+2. Present the rename plan in the preview
+3. Get confirmation
+4. Rename — this preserves all existing node bindings automatically
+5. Only then identify true gaps (roles with no existing style to rename)
+6. Create new styles only for those gaps
+
+Never create a new style if an existing style can be renamed to fill that role.
+Creating a parallel style alongside a legacy one produces duplicates and splits bindings.
 
 Example:
 
-Heading Large → Text / Heading / 32
-Gray Dark → Color / Neutral / 700
+Existing: H2 (32px SemiBold) → rename to Text / Heading / SemiBold 32/AUTO
+Existing: Button (16px SemiBold) → rename to Text / Action / SemiBold 16/AUTO
+Existing: Helper 1 (14px SemiBold) → rename to Text / Body / SemiBold 14/AUTO
 
+Do NOT create Text / Heading / SemiBold 32/AUTO as a new style while H2 still exists.
 
 Never rename automatically.
 

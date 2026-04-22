@@ -53,15 +53,28 @@ Changes are allowed only after designer confirmation and final validation.
 
 Execution occurs only after designer confirmation and final validation.
 
-Execution always happens in two ordered steps:
+Execution always happens in two ordered steps.
+
+Step 2 MUST NOT begin until Step 1 is fully complete and validated.
+Never create new styles before renaming or merging existing ones.
+Never apply styles to nodes before the style system is finalized.
 
 Step 1 — Update style system
 This step may include:
-- creating missing styles
-- renaming styles
-- merging duplicate styles
+- renaming existing styles to normalized names (ALWAYS first)
+- merging duplicate styles (ALWAYS before creating new ones)
 - deleting unused styles
+- creating missing styles (ONLY after rename and merge are done)
 - normalizing naming
+
+CRITICAL ORDER within Step 1:
+1. rename existing → normalized name
+2. merge duplicates → single canonical style
+3. delete unused
+4. create new styles only for gaps that remain after rename/merge
+
+Never create a new style if an existing style can be renamed to fill that role.
+If an existing style already covers a role, rename it — do not create a parallel style.
 
 Step 2 — Apply styles to layout nodes
 This step may include:
