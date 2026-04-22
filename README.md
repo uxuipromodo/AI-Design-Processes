@@ -9,7 +9,7 @@
 Одна команда в терміналі — більше нічого не потрібно:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/uxuipromodo/AI-Design-Processes/main/install.sh)
+git clone https://github.com/uxuipromodo/AI-Design-Processes.git /tmp/ai-skills && bash /tmp/ai-skills/install.sh
 ```
 
 Скрипт автоматично:
