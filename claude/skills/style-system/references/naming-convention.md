@@ -67,6 +67,18 @@ Text / Label / Medium 10/100
 
 Never skip role classification.
 
+Never use semantic size suffixes (SM, Base, MD, LG, XS) as the final segment.
+
+WRONG:
+- Text / Body / SM ❌
+- Text / Body / Base ❌
+- Text / Heading / LG ❌
+- Text / Action / MD ❌
+
+These suffixes are subjective, ambiguous, and break the naming contract.
+The `Weight Size/LineHeight` format is the only allowed form.
+If you see a reason to deviate, ask the user before creating any styles.
+
 
 Keep size and line-height in the final visible segment.
 

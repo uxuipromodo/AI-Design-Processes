@@ -428,6 +428,27 @@ Text / Body / {weight} {size}/{line-height}
 Text / Action / {weight} {size}/{line-height}
 Text / Label / {weight} {size}/{line-height}
 
+The `{weight}` is the exact font style string (e.g. `Regular`, `Medium`, `Bold`, `Light`).
+The `{size}` is the font size in px. The `{line-height}` is the line height as a percentage integer derived from the style, or `AUTO`.
+
+Correct examples:
+- `Text / Heading / Medium 24/120`
+- `Text / Body / Regular 16/150`
+- `Text / Action / Medium 13/200`
+- `Text / Caption / Regular 12/AUTO`
+
+WRONG — never use semantic size suffixes as the final segment:
+- `Text / Body / SM` ❌
+- `Text / Body / Base` ❌
+- `Text / Heading / LG` ❌
+- `Text / Action / MD` ❌
+
+Semantic suffixes (SM, Base, MD, LG, XS) are subjective and ambiguous.
+The `{weight} {size}/{line-height}` format is the only allowed form.
+If you see a reason to deviate, ask the user before creating any styles.
+
+See references/naming-convention.md for full naming rules.
+
 
 Color styles:
 
