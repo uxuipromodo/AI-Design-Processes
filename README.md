@@ -72,7 +72,6 @@ claude mcp add --scope user --transport http figma https://mcp.figma.com/mcp
 
 **4.** Server status зміниться на **Enabled** — сервер запущено
 
-> Цей сервер потрібно вмикати щоразу коли працюєш з Claude. Він активний поки відкритий Figma Desktop з файлом.
 
 ---
 
