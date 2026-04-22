@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
 
-REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_URL="https://github.com/uxuipromodo/AI-Design-Processes.git"
+REPO_DIR="$HOME/.claude/ai-design-skills"
 CLAUDE_DIR="$HOME/.claude"
 SKILLS_DIR="$CLAUDE_DIR/skills"
 SETTINGS_FILE="$CLAUDE_DIR/settings.json"
@@ -26,11 +27,28 @@ if ! command -v claude &>/dev/null; then
 fi
 echo -e "${GREEN}✓ Claude Code знайдено${NC}"
 
-# 2. Створення директорій
-mkdir -p "$SKILLS_DIR"
-echo -e "${GREEN}✓ ~/.claude/skills/ готово${NC}"
+# 2. Перевірка git
+if ! command -v git &>/dev/null; then
+  echo -e "${RED}✗ git не знайдено.${NC}"
+  echo "  Встанови Xcode Command Line Tools: xcode-select --install"
+  exit 1
+fi
+echo -e "${GREEN}✓ git знайдено${NC}"
 
-# 3. Копіювання скілів
+# 3. Клонування або оновлення репо
+echo ""
+if [ -d "$REPO_DIR/.git" ]; then
+  echo "Оновлення репозиторію..."
+  git -C "$REPO_DIR" pull --quiet
+  echo -e "${GREEN}✓ Репозиторій оновлено${NC}"
+else
+  echo "Завантаження репозиторію..."
+  git clone --quiet "$REPO_URL" "$REPO_DIR"
+  echo -e "${GREEN}✓ Репозиторій завантажено${NC}"
+fi
+
+# 4. Встановлення скілів
+mkdir -p "$SKILLS_DIR"
 echo ""
 echo "Встановлення скілів..."
 
@@ -42,7 +60,7 @@ for skill_src in "$REPO_DIR/claude/skills"/*/; do
   echo -e "  ${GREEN}✓${NC} $skill_name"
 done
 
-# 4. Запис sync-скрипту
+# 5. Запис sync-скрипту
 cat > "$SYNC_SCRIPT" <<SYNCEOF
 #!/bin/bash
 REPO="$REPO_DIR"
@@ -62,16 +80,14 @@ chmod +x "$SYNC_SCRIPT"
 echo ""
 echo -e "${GREEN}✓ Sync-скрипт записано${NC}"
 
-# 5. Додавання SessionStart хука в settings.json
+# 6. Додавання SessionStart хука в settings.json
 if [ ! -f "$SETTINGS_FILE" ]; then
   echo '{}' > "$SETTINGS_FILE"
 fi
 
-# Перевірка чи вже є хук
 if grep -q "sync-skills.sh" "$SETTINGS_FILE" 2>/dev/null; then
   echo -e "${GREEN}✓ SessionStart хук вже налаштовано${NC}"
 else
-  # Додаємо хук через node (він є у всіх Mac з Claude Code)
   node -e "
 const fs = require('fs');
 const path = '$SETTINGS_FILE';
@@ -103,7 +119,7 @@ console.log('ok');
   }
 fi
 
-# 6. Результат
+# 7. Результат
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo -e "${GREEN}  Готово! Скіли встановлено.${NC}"

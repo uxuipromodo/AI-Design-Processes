@@ -6,25 +6,20 @@
 
 ## Встановлення (для нових учасників)
 
-**Крок 1.** Клонуй репозиторій у будь-яке зручне місце:
+Одна команда в терміналі — більше нічого не потрібно:
 
 ```bash
-git clone https://github.com/uxuipromodo/AI-Design-Processes.git
-```
-
-**Крок 2.** Запусти інсталятор:
-
-```bash
-bash AI-Design-Processes/install.sh
+bash <(curl -fsSL https://raw.githubusercontent.com/uxuipromodo/AI-Design-Processes/main/install.sh)
 ```
 
 Скрипт автоматично:
+- завантажить репозиторій в `~/.claude/ai-design-skills/`
 - встановить всі скіли в `~/.claude/skills/`
 - налаштує автооновлення при кожному старті Claude Code
 
-**Потребує:** Claude Code встановленого на машині → [claude.ai/download](https://claude.ai/download)
+**Потребує:** Claude Code на машині → [claude.ai/download](https://claude.ai/download)
 
-**Оновлення вручну** (якщо потрібно не чекати наступного старту):
+**Оновлення вручну** (якщо не хочеш чекати наступного старту):
 
 ```bash
 bash ~/.claude/sync-skills.sh
