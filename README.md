@@ -4,9 +4,44 @@ Skills — це інструкційні модулі для Claude Code, які
 
 ---
 
-## Встановлення
+## Крок 1 — Відкрити термінал у Claude Code
 
-Потрібен Claude Code → [claude.ai/download](https://claude.ai/download)
+1. Завантаж та встанови Claude Code → [claude.ai/download](https://claude.ai/download)
+2. Відкрий Claude Code
+3. Натисни **+** щоб створити нову сесію
+4. У полі вводу введи `!` перед будь-якою командою — це запустить її прямо в терміналі сесії
+
+> Або відкрий звичайний термінал (Terminal на Mac) — всі команди нижче працюють в обох місцях.
+
+---
+
+## Крок 2 — Встановити Figma MCP
+
+Figma MCP дає Claude доступ до твоїх файлів у Figma.
+
+**1. Додай сервер:**
+
+```bash
+claude mcp add --scope user --transport http figma https://mcp.figma.com/mcp
+```
+
+**2. Перезапусти Claude Code** — закрий і відкрий знову.
+
+**3. Введи в Claude Code:**
+
+```
+/mcp
+```
+
+Знайди `figma` у списку і натисни **Authenticate**.
+
+**4.** Відкриється браузер — натисни **Allow Access**.
+
+**5.** Побачиш повідомлення `Authentication successful. Connected to figma` — готово.
+
+---
+
+## Крок 3 — Встановити skills
 
 Одна команда в терміналі:
 
