@@ -2,6 +2,15 @@ Figma Best Practices Reference
 
 This document defines how variables should be created, applied, and maintained inside Figma when using the Full Variables Skill.
 
+For the structural model these practices serve (primitive / semantic / component
+hierarchy, naming, aliasing) see:
+
+references/variables-architecture.md
+
+For extension, deprecation, and patch-vs-migration decisions see:
+
+references/token-improvements.md
+
 It ensures consistency between system architecture and real layout usage.
 
 1. Design tokens architecture
@@ -260,6 +269,11 @@ replace usage gradually
 remove styles only after variable coverage is complete
 
 This prevents layout breakage during migration.
+
+The full deprecation flow (mark deprecated → replace usage → remove only
+after full coverage) is defined in:
+
+references/token-improvements.md (deprecation strategy)
 
 17. Scaling expectation
 

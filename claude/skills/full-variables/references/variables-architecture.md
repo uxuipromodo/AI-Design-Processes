@@ -7,6 +7,16 @@ It establishes the hierarchy, naming logic, aliasing rules, and decision criteri
 
 ## 1. Token hierarchy
 
+For real-world Figma usage discipline (anti-hardcoding, state handling,
+migration safety) see:
+
+references/figma-best-practices.md
+
+For extension, deprecation, duplicate detection, and patch-vs-migration
+guidance see:
+
+references/token-improvements.md
+
 The variable system follows a three-layer structure:
 
 1. Primitive layer
@@ -248,6 +258,11 @@ they should be used as extraction sources
 When variables exist:
 
 styles must not duplicate variable logic
+
+For the full migration workflow (do-not-delete-immediately, gradual replacement,
+post-migration cleanup) see:
+
+references/figma-best-practices.md (migration safety rules)
 
 
 ## 12. Direct primitive usage exceptions

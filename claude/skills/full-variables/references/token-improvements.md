@@ -2,6 +2,16 @@ Token Improvements Reference
 
 This document explains how to extend, refine, and stabilize a variable system inside the Full Variables Skill.
 
+For the structural model this document extends (token hierarchy, alias
+direction, naming conventions) see:
+
+references/variables-architecture.md
+
+For Figma-specific application discipline (state variables, accessibility
+roles, refactoring order) see:
+
+references/figma-best-practices.md
+
 It is used when the system already exists or when new variables must be added during growth of the project.
 
 1. Adding semantic variables
@@ -111,6 +121,10 @@ Deprecation is needed when:
 * a component-specific variable became semantic or vice versa
 
 Never remove variables blindly if they may still be applied in the file.
+
+Migration safety during deprecation is defined in:
+
+references/figma-best-practices.md (migration safety rules)
 
 6. Migration vs patch decisions
 
@@ -229,3 +243,7 @@ When a new need appears:
 4. create a component-specific variable only if scope is truly local
 5. avoid hardcoded fallback unless it is a temporary exploration step
 6. prefer patch over migration unless the structure is fundamentally broken
+
+The full creation decision tree is also defined in:
+
+references/variables-architecture.md (variable creation decision tree)
