@@ -58,8 +58,6 @@ ls ~/.claude/skills/
 - `/full-variables` — побудова variables-архітектури
 - `/import-webpage-to-figma` — імпорт вебсторінок як frame у Figma
 
-[Детальна інструкція →](./README-full.md) · [Notion гайд →](#)
-
 ---
 
 ## Available Skills
