@@ -65,6 +65,14 @@ Semantic palette
 
 Normalize each layer independently.
 
+Palette completion (neutral interpolation, accent ladders, semantic variants,
+surface hierarchy) is defined in:
+
+references/scale-extension.md
+
+Contrast validation against these layers is defined in:
+references/accessibility-validation.md
+
 
 # Neutral Palette Detection
 

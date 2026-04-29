@@ -269,3 +269,10 @@ Audit mode is planning-first.
 Audit findings guide execution, but do not execute changes by themselves.
 
 Only confirmed and validated actions may proceed to style-system update and layout application.
+
+Domain-specific rules invoked during audit and execution are defined in:
+- references/typography-extraction.md
+- references/color-extraction.md
+- references/scale-extension.md
+- references/naming-convention.md
+- references/accessibility-validation.md

@@ -338,6 +338,12 @@ Color / Semantic / Variant
 
 Reject unnamed generated steps.
 
+Full naming rules, legacy-rename order, and stability policies are defined in:
+
+references/naming-convention.md
+
+Do not introduce alternative naming during extension.
+
 
 # Planning Mode Output Requirements
 

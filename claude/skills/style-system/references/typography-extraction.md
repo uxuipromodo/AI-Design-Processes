@@ -66,6 +66,11 @@ visual hierarchy position
 
 Cluster styles by role before assigning names.
 
+Detected scale may be incomplete. Extension rules (gap detection, role-aware
+extension, line-height completion) are defined in:
+
+references/scale-extension.md
+
 
 # Role Detection Rules
 

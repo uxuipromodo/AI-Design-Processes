@@ -1,5 +1,12 @@
 # Accessibility Validation Strategy
 
+Accessibility validation runs against the color layer structure defined in:
+
+references/color-extraction.md
+
+Neutral / Accent / Semantic / Surface / Border layer roles referenced below
+are normalized during color extraction.
+
 Validate readability, contrast, and visual clarity of the generated typography and color system before applying styles.
 
 Never apply a proposed style system without accessibility checks.

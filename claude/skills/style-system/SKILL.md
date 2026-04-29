@@ -1,6 +1,14 @@
 ---
 name: style-system-builder
-description: Extract, normalize, extend, and apply typography and color styles from a Figma layout using planning mode.
+description: Extracts, normalizes, extends, and applies typography and color styles from Figma layouts in planning-first mode. Use when user asks to "build a style system", "normalize typography", "audit styles", "extract text styles from Figma", "extract color styles", "clean up the design system", "fix inconsistent styles", "normalize the neutral palette", "merge duplicate styles", "rename legacy styles" (H1, H2, Button, Helper), or mentions style-system audit, typography audit, color audit, scale extension, semantic colors (Success/Error/Warning/Info), or design-to-style-library cleanup in a Figma file, page, frame, or selection.
+license: MIT
+compatibility: Requires Figma Plugin API runtime with font access. Designed for planning-first audit workflows on files, pages, frames, or selections.
+metadata:
+  author: Vasyl
+  version: 1.0.0
+  target: figma-plugin
+  category: design-systems
+  tags: [typography, color, style-audit, figma, design-system]
 ---
 
 # Style System Builder
@@ -22,11 +30,59 @@ This skill:
 - applies styles only after approval
 
 
+Reference map:
+
+- Workflow phases, severity model, rename/merge/create order → `references/audit-principles.md`
+- Typography detection, role clustering, canonical 2px grid, non-canonical handling → `references/typography-extraction.md`
+- Color extraction, neutral/accent/semantic layers, apply safety rules → `references/color-extraction.md`
+- Scale extension, gap detection, tonal interpolation, variant completion → `references/scale-extension.md`
+- Contrast thresholds, surface hierarchy, semantic and interactive state validation → `references/accessibility-validation.md`
+- Full naming formats, legacy rename rules, multi-font namespacing → `references/naming-convention.md`
+
+
 # Operating Mode
 
 Always run in planning mode.
 
-PHASE 0 — FONT AVAILABILITY CHECK
+No styles are created or applied before explicit designer confirmation.
+
+
+Workflow follows the four-phase audit model:
+
+PHASE 1 — AUDIT
+
+PHASE 2 — DESIGNER CONFIRMATION
+
+PHASE 3 — FINAL VALIDATION
+
+PHASE 4 — APPLY CHANGES
+  Step 4.1 — update style system (rename → merge → delete → create)
+  Step 4.2 — apply styles to layout nodes
+
+
+See `references/audit-principles.md` for:
+
+- full phase rules
+- severity model (Critical / Warning / Suggestion)
+- issue taxonomy
+- designer confirmation model
+- final validation checks
+- the mandatory rename → merge → delete → create order within Step 4.1
+
+
+CRITICAL ORDER within Step 4.1:
+
+1. rename existing styles to their normalized target names (ALWAYS first)
+2. merge duplicates into a single canonical style
+3. delete unused
+4. create new styles only for gaps that remain after rename and merge
+
+Never create a new style if an existing style can be renamed to fill that role.
+
+Never apply styles to nodes before the style system is finalized (Step 4.1 must fully complete before Step 4.2 begins).
+
+
+# Font Availability Guard (BLOCKING)
 
 This is a blocking prerequisite for all typography operations.
 
@@ -36,6 +92,7 @@ Before typography extraction, typography normalization, or text style creation:
 - detect all used font families
 - detect all used styles or weights for each family
 - verify each detected font family and style is available in Plugin API runtime
+
 
 If any detected font is unavailable:
 
@@ -51,6 +108,7 @@ Missing fonts:
 – {Font Family} / {Style}
 – {Font Family} / {Style}
 
+
 Do not substitute fallback fonts.
 
 Do not continue typography generation.
@@ -59,38 +117,8 @@ Do not create text styles.
 
 Do not continue to later phases.
 
-Pipeline:
 
-1. Run font availability check on all text nodes
-2. Read all local text styles
-3. Read all local color styles
-4. Extract typography scale
-5. Extract grayscale palette
-6. Detect semantic colors
-7. Detect duplicates
-8. Detect near-duplicates
-9. Detect missing scale steps
-10. Propose normalized system
-10a. MANDATORY — before proposing any new style:
-     - map every existing style to its normalized target name
-     - if an existing style covers a role → rename it, do not create a new one
-     - only mark a slot as "missing" if no existing style can fill it after renaming
-     - show the full rename/merge/create plan in the preview
-11. Show preview
-12. Ask confirmation
-13. Apply changes only after approval — in order: rename → merge → delete → create → apply to nodes
-
-
-FINAL PHASE — CREATE / APPLY STYLES TO FILE
-
-After planning-mode confirmation, the skill may:
-
-1. Create normalized text styles
-2. Create normalized color styles
-3. Apply created styles back to matching nodes in the file
-
-
-Supported output modes:
+# Supported Output Modes
 
 - Analyze only
 - Create styles only
@@ -104,67 +132,27 @@ Rules:
 - no styles are applied before confirmation
 - in Create styles only mode, create styles but do not bind them to nodes
 - in Create and apply styles mode, create styles and apply them to matching text and color nodes in the file
-- the final step may include optional rebinding or application to the file, not only style generation
 
 
-# Audit Mode
+# Typography
 
-The style-system skill supports a structured audit-mode workflow.
+Typography uses a 2px step grid with semantic role clustering.
 
-Audit behavior is defined in:
-
-references/audit-principles.md
-
-Audit mode:
-
-- detects style inconsistencies
-- reports structured issues
-- assigns severity levels
-- suggests normalization options
-- requires designer confirmation
-- performs a final validation pass
-- only then allows style creation or application
-
-Audit mode never modifies styles or layout before confirmation.
-
-
-# Typography System Rules
 
 Base rhythm:
 
 2px
 
 
-Typography uses a 2px step grid.
+Roles and default weights:
 
-Any font size divisible by 2px is canonical.
+Heading → Semibold
 
-Any font size not divisible by 2px is non-canonical.
+Body → Regular
 
-Canonical examples:
+Action → Medium
 
-4
-6
-8
-10
-12
-14
-16
-18
-20
-24
-32
-40
-48
-64
-
-
-Role mapping:
-
-Heading → semibold  
-Body → regular  
-Action → medium  
-Label → medium or regular
+Label → Medium or Regular
 
 
 Cluster detected styles into semantic roles before naming:
@@ -178,89 +166,42 @@ Label
 Do not generate purely numeric text styles unless classification is ambiguous.
 
 
-# Non-Canonical Text Size Rule
-
-If a detected text size is not divisible by 2px:
-
-do not normalize automatically
-
-do not snap silently
-
-do not assign a final style automatically
-
-Stop in planning mode and show:
-
-Detected non-canonical text size: {size}px
-
-Possible mapping:
-- {nearest lower canonical step}
-- {nearest higher canonical step}
-- keep as custom
-
-Choose target role and size before continuing.
+Non-canonical sizes (not divisible by 2px) must stop in planning mode with explicit options. Never snap silently.
 
 
-If scale steps are missing:
+See `references/typography-extraction.md` for:
 
-propose contextual extension only when role structure requires it
-
-
-Example:
-
-Detected:
-
-14
-16
-18
-32
-
-Proposed:
-
-12
-20
-30
-
-Ask confirmation before creation.
+- role detection rules per category (Heading / Body / Action / Label)
+- canonical scale values and alignment rules
+- non-canonical size planning-mode workflow
+- size clustering and frequency-based priority
+- line-height inference per role
+- letter-spacing inference per role
+- weight normalization and family handling
+- exception handling
 
 
-# Line Height and Tracking Rules
+See `references/scale-extension.md` for:
 
-Infer spacing from role:
-
-Heading:
-
-- tighter line height
-- optional tighter tracking for large sizes
-
-Body:
-
-- neutral line height
-- neutral tracking
-
-Label / Action:
-
-- compact line height
-- optional wider tracking for dense UI labels
+- scale gap detection
+- role-aware extension
+- frequency-aware extension
+- line-height and weight completion for new steps
 
 
-Never leave inferred values undefined when extending scale.
+# Color
 
-
-# Color System Layers
-
-Build color styles in layers:
+Color styles are built in three layers:
 
 1. Neutral palette
-2. Brand / accent palette
+2. Accent palette
 3. Semantic palette
 
 
 Always normalize Neutral palette first.
 
 
-Color audit must be node-driven and style-aware.
-
-Build the audit color universe from:
+Color audit must be node-driven and style-aware. Build the audit color universe from:
 
 1. all styles that exist
 2. all actual color values found on nodes
@@ -279,260 +220,278 @@ Always scan:
 Do not skip a color only because it is not wrapped in a local style.
 
 
-Automatic color application is restricted to semantically valid solid-fill targets only.
-
-Apply color styles only to nodes that already contain an intentional SOLID fill.
-
-Do not apply background color styles to IMAGE, GRADIENT, VIDEO, or any other non-solid paints.
-
-Do not apply background color styles to mixed or multi-fill nodes unless explicitly confirmed.
-
-Do not add new background fills to structural nodes automatically.
-
-Skip by default:
-
-- structural auto-layout wrappers
-- section wrapper frames
-- footer column wrappers
-- structural container frames
-- logo containers
-- icon containers
-- vector-only containers
+Avoid defaulting to pure black (#000000) or pure white (#FFFFFF) as primary anchors unless explicitly required by the layout.
 
 
-Never apply background color styles automatically to:
-
-- VECTOR nodes
-- BOOLEAN_OPERATION nodes
-- GROUP nodes
-- frames whose children are only vectors or icons
-- nodes whose names indicate logo or icon when such naming exists
-
-
-Preserve image-bearing nodes unchanged.
-
-Auto-layout frames must not receive background color styles unless they already had an intentional solid fill before normalization.
-
-
-# Neutral Palette Template
-
-Merge detected grayscale with baseline template:
-
-White
-
-Gray 15
-Gray 25
-Gray 50
-Gray 100
-Gray 200
-Gray 300
-Gray 400
-Gray 500
-Gray 600
-Gray 700
-Gray 800
-
-
-Never replace project grayscale.
-
-Always merge and normalize.
-
-
-Example behavior:
-
-Detected:
-
-#111111
-#2A2A2A
-#444444
-
-Propose mapping into:
-
-Color / Neutral / Gray 700
-Color / Neutral / Gray 600
-Color / Neutral / Gray 500
-
-
-Ask confirmation before applying.
-
-
-Avoid defaulting to pure black or pure white unless explicitly required by the layout.
-
-
-# Semantic Colors
-
-Ensure presence of baseline semantic colors:
+Ensure baseline semantic colors are present:
 
 Success
 Error
 
 
-If missing:
-
-propose creation
+Warning and Info are optional — never create them silently; always confirm first.
 
 
-Also check:
+See `references/color-extraction.md` for:
 
-Warning
-Info
-
-
-Do not create optional semantic colors silently.
-
-
-Always confirm before creation.
-
-
-# Accent Color Clustering
-
-If multiple accent hues detected:
-
-cluster into constrained palette families
+- extraction targets and role grouping
+- neutral palette template and merge rules
+- pure black/white handling
+- accent clustering and palette consolidation
+- semantic palette detection and variant completion
+- frequency-based priority
+- surface role detection (Background / Surface / Elevated / Overlay)
+- border color clustering (Subtle / Default / Strong)
+- apply safety rules (SOLID-only, skip VECTOR / GROUP / IMAGE)
 
 
-Prefer intentional accent groups over preserving one-off colors.
+See `references/scale-extension.md` for:
+
+- neutral palette extension and tonal interpolation
+- accent ladder completion
+- semantic variant completion
+- surface layer completion
 
 
-Ask confirmation before palette consolidation.
+# Apply Safety (Summary)
+
+Apply color styles only to nodes that already contain a semantically valid SOLID fill.
 
 
-# Accessibility Validation
+Never auto-apply background color styles to:
 
-Before applying proposed color system:
+- IMAGE / GRADIENT / VIDEO / any non-solid paints
+- mixed or multi-fill nodes unless explicitly confirmed
+- VECTOR nodes
+- BOOLEAN_OPERATION nodes
+- GROUP nodes
+- frames whose children are only vectors or icons
+- nodes whose names indicate logo or icon
+- structural auto-layout wrappers (section wrappers, footer columns, menu groupings, etc.)
 
-validate contrast for:
 
-primary body text
-secondary body text
-large headings
-UI component boundaries
+Preserve image-bearing nodes unchanged.
+
+
+See `references/color-extraction.md` for the full apply safety rule set and rationale.
+
+
+# Accessibility
+
+Before applying any proposed color system:
+
+validate contrast for primary body text, secondary body text, large headings, and UI component boundaries.
 
 
 Contrast thresholds:
 
-Body text ≥ 4.5:1  
-Large text ≥ 3:1  
+Body text ≥ 4.5:1
+Large text ≥ 3:1
 UI boundaries ≥ 3:1
 
 
-If violations detected:
-
-report before applying styles
+If violations detected: report before applying styles. Offer adjustment suggestions. Never auto-correct silently.
 
 
-Offer adjustment suggestions.
+See `references/accessibility-validation.md` for:
+
+- validation scope (text, surfaces, semantic, interactive states, overlays)
+- per-role contrast rules (body / heading / label)
+- surface hierarchy validation
+- border visibility validation
+- semantic color distinguishability
+- interactive / disabled / overlay / accent validation
+- exception reporting format
 
 
 # Naming Convention
 
-Text styles:
+Typography format:
 
-Text / Heading / {weight} {size}/{line-height}
-Text / Body / {weight} {size}/{line-height}
-Text / Action / {weight} {size}/{line-height}
-Text / Label / {weight} {size}/{line-height}
+Text / Role / Weight Size/LineHeight
 
-The `{weight}` is the exact font style string (e.g. `Regular`, `Medium`, `Bold`, `Light`).
-The `{size}` is the font size in px. The `{line-height}` is the line height as a percentage integer derived from the style, or `AUTO`.
+
+Roles: Heading, Body, Action, Label.
+
 
 Correct examples:
-- `Text / Heading / Medium 24/120`
-- `Text / Body / Regular 16/150`
-- `Text / Action / Medium 13/200`
-- `Text / Caption / Regular 12/AUTO`
 
-WRONG — never use semantic size suffixes as the final segment:
+Text / Heading / Semibold 32/110
+Text / Body / Regular 16/150
+Text / Action / Medium 14/120
+Text / Label / Medium 12/100
+
+
+Color format:
+
+Color / Layer / Role
+
+
+Examples:
+
+Color / Neutral / White
+Color / Neutral / Gray 500
+Color / Accent / Primary
+Color / Semantic / Success
+
+
+NEVER use semantic size suffixes (SM, Base, MD, LG, XS) as the final segment. The `Weight Size/LineHeight` format is the only allowed form for typography.
+
+
+WRONG:
+
 - `Text / Body / SM` ❌
-- `Text / Body / Base` ❌
 - `Text / Heading / LG` ❌
 - `Text / Action / MD` ❌
 
-Semantic suffixes (SM, Base, MD, LG, XS) are subjective and ambiguous.
-The `{weight} {size}/{line-height}` format is the only allowed form.
-If you see a reason to deviate, ask the user before creating any styles.
 
-See references/naming-convention.md for full naming rules.
+Do not generate unnamed styles. Always normalize naming before creation.
 
 
-Color styles:
+See `references/naming-convention.md` for:
 
-Color / Neutral / White
-
-Color / Neutral / Gray {step}
-
-Color / Semantic / Success
-Color / Semantic / Error
-Color / Semantic / Warning
-Color / Semantic / Info
-
-
-Do not generate unnamed styles.
-
-
-Always normalize naming before creation.
-
-
-# Style Deduplication Rules
-
-If styles differ only slightly:
-
-cluster together
-
-
-Example:
-
-31px
-32px
-30px
-
-Normalize:
-
-Text / Heading / 32
-
-
-Ask confirmation before merge.
-
-
-# System-First Normalization Policy
-
-Treat detected styles as candidate system inputs, not final truth.
-
-
-Prefer normalization over duplication.
-
-
-Do not preserve random one-off values unless confirmed intentional.
-
-
-Constrain palette hue count when possible.
-
-
-Prefer role-based hierarchy over size-only hierarchy.
+- full naming philosophy and structure rules
+- multi-font namespacing (Text / UI / … vs Text / Editorial / …)
+- weight / line-height / letter-spacing naming policies
+- neutral, accent, semantic, surface, and border naming structures
+- legacy style renaming rules (H1, H2, Button, Helper, Heading Large, etc.)
+- duplicate detection and exception naming
+- naming stability rules
 
 
 # Preview Output Requirements
 
-Before applying:
+Before applying any changes, show:
 
-show detected typography scale
-
-show detected grayscale palette
-
-show detected semantic palette
-
-show missing steps
-
-show clustering decisions
-
-show proposed naming
-
-show accessibility warnings
-
-show palette merges
+- detected typography scale
+- detected grayscale palette
+- detected semantic palette
+- missing steps
+- clustering decisions
+- proposed naming
+- accessibility warnings
+- palette merges
+- full rename → merge → delete → create plan (mapped per existing style)
 
 
-Then request confirmation.
+Apply changes only after designer confirmation.
 
 
-Apply changes only after approval.
+# Examples
+
+## Example 1: Typography audit on an existing file
+
+User says: "Audit the typography in this Figma file."
+
+Actions:
+
+1. Run font availability check on all text nodes (blocking).
+2. Read local text styles and actual values used on text nodes.
+3. Cluster by role (Heading / Body / Action / Label).
+4. Detect non-canonical sizes, duplicates, and missing steps.
+5. Build rename/merge/create plan with severity per finding.
+6. Present audit report in planning mode.
+
+Result: Structured audit output. No styles modified until designer confirms.
+
+
+## Example 2: Full style system build from a layout
+
+User says: "Build a style system from this layout and apply it."
+
+Actions:
+
+1. Font availability check (blocking).
+2. Typography extraction → role clustering → scale alignment (see `references/typography-extraction.md`).
+3. Color extraction → neutral / accent / semantic layers (see `references/color-extraction.md`).
+4. Scale extension proposals for gaps (see `references/scale-extension.md`).
+5. Accessibility validation (see `references/accessibility-validation.md`).
+6. Naming normalization with rename-before-create plan (see `references/naming-convention.md`).
+7. Preview → designer confirmation → final validation.
+8. Step 4.1: rename → merge → delete → create styles.
+9. Step 4.2: apply styles to matching nodes.
+
+Result: Complete, normalized style system created and bound to the layout.
+
+
+## Example 3: Non-canonical size encountered
+
+A text node uses 15px.
+
+Actions:
+
+1. Stop in planning mode.
+2. Present:
+
+   Detected non-canonical text size: 15px
+
+   Possible mapping:
+   - 14
+   - 16
+   - keep as custom
+
+3. Wait for designer choice.
+4. Continue only after confirmation.
+
+Result: No silent snap. Designer owns the decision.
+
+
+## Example 4: Legacy styles renamed instead of duplicated
+
+File contains legacy styles: `H2`, `Button`, `Helper 1`.
+
+Actions:
+
+1. Map each to its normalized target:
+   - `H2` → `Text / Heading / Semibold 32/AUTO`
+   - `Button` → `Text / Action / Semibold 16/AUTO`
+   - `Helper 1` → `Text / Body / Semibold 14/AUTO`
+2. Present rename plan in preview.
+3. On confirmation, rename existing styles (preserving all node bindings).
+4. Only then identify remaining gaps and create new styles for those.
+
+Result: No parallel duplicates. All existing bindings preserved.
+
+
+# Troubleshooting
+
+## FONT_CHECK_FAILED
+
+Cause: One or more fonts used by text nodes are not available in Plugin API runtime.
+
+Solution: Load the missing fonts in Figma and re-run the skill. Do not substitute fallback fonts. Typography phases stay blocked until all fonts resolve.
+
+
+## Styles exist but are not applied to nodes
+
+Cause: A style system is present in the file, but designers used raw values on specific nodes.
+
+Solution: In audit mode, report as a layout/style mismatch finding. Propose rebinding during Step 4.2 after designer confirmation. Never rebind silently.
+
+
+## Duplicate or near-duplicate styles detected
+
+Cause: Legacy ad-hoc styles created without system (e.g., `Text 16`, `Paragraph 16`, `Body Copy`).
+
+Solution: Cluster candidates into a single canonical role. Always rename the most-bound existing style first, then merge others into it. Never create a new canonical style while legacy equivalents still exist.
+
+
+## Node flagged for background color style, but node is IMAGE / GRADIENT / VECTOR / GROUP
+
+Cause: Apply logic must not overwrite image fills or structural nodes.
+
+Solution: Skip automatically. Preserve image-bearing nodes unchanged. See `references/color-extraction.md` (apply safety rules) for the full skip list.
+
+
+## Non-canonical text size rejected by designer
+
+Cause: Designer wants to keep a size not divisible by 2px (e.g., 15px for a specific component).
+
+Solution: Accept the exception. Classify under `Text / Exception / 15` (or role-appropriate exception). Do not force normalization.
+
+
+## Contrast validation reports violations
+
+Cause: Proposed color assignments do not meet WCAG thresholds against target surfaces.
+
+Solution: Present violations with nearest compliant alternatives (e.g., Neutral / 500 → Neutral / 600). Request designer confirmation before substitution. Never auto-correct.

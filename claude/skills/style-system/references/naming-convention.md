@@ -1,5 +1,12 @@
 # Naming Convention Strategy
 
+Naming work happens inside the audit workflow defined in:
+
+references/audit-principles.md
+
+Legacy style renaming (see "Legacy Style Renaming Rules" below) must always
+run before any new style creation, as part of Step 4.1 of the audit workflow.
+
 Ensure all generated styles follow a predictable, role-based naming system.
 
 Naming must be stable across projects, scalable over time, and readable by humans.
