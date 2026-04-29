@@ -31,12 +31,25 @@ Inspect styles and layout usage within the requested scope.
 
 Detect issues, classify severity, and prepare suggested resolutions.
 
+IMPORTANT: All data collection MUST be performed via `use_figma` (Plugin API).
+Do NOT use `get_metadata` or `get_design_context` as primary audit tools — they provide
+only structural overviews and lack full node-level property access.
+`get_metadata`/`get_design_context` may only be used for quick file orientation if needed.
+
 
 PHASE 2 — DESIGNER CONFIRMATION
 
 Present findings and wait for the designer to confirm which actions should proceed.
 
 Nothing is executed automatically during the audit phase.
+
+IMPORTANT: Accessibility validation is MANDATORY before presenting PHASE 2.
+Before showing findings to the designer, run a `use_figma` call to:
+1. Collect text fill color + nearest opaque background color for each TEXT node
+2. Calculate contrast ratio for each text/background pair
+3. Flag all pairs failing WCAG thresholds (Body ≥ 4.5:1, Large text ≥ 3:1, UI ≥ 3:1)
+Include the accessibility report in the PHASE 2 output.
+Do NOT present PHASE 2 without the accessibility section.
 
 
 PHASE 3 — FINAL CONFIRMATION / VALIDATION

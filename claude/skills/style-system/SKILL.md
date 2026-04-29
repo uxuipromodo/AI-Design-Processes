@@ -65,9 +65,20 @@ Workflow follows the four-phase audit model:
 
 PHASE 1 — AUDIT
   *(Збираємо всі значення з файлу, виявляємо проблеми. Жодних змін у файлі не відбувається.)*
+  IMPORTANT: All data collection (fonts, text sizes, colors, node fills) MUST be done via `use_figma`.
+  Do NOT use `get_metadata` or `get_design_context` for audit data collection — they do not provide
+  full node-level access. `get_metadata`/`get_design_context` may only be used for quick structural
+  orientation if needed, never as the primary audit tool.
 
 PHASE 2 — DESIGNER CONFIRMATION
   *(Показуємо знахідки і пропозиції. Чекаємо рішення дизайнера по кожному пункту. Без підтвердження — нічого не виконується.)*
+  IMPORTANT: Accessibility validation is a MANDATORY part of the PHASE 2 preview.
+  Before presenting findings to the designer, run a `use_figma` call that:
+  1. For each TEXT node, collects its fill color AND the background color of its nearest opaque parent
+  2. Calculates contrast ratio for each text/background pair
+  3. Flags pairs that fail WCAG thresholds (Body ≥ 4.5:1, Large text ≥ 3:1, UI boundaries ≥ 3:1)
+  Include the accessibility report in the PHASE 2 output alongside typography and color findings.
+  Do NOT skip accessibility and do NOT present PHASE 2 without it.
 
 PHASE 3 — FINAL VALIDATION
   *(Перевіряємо що підтверджений план без конфліктів. Останній шанс щось скоригувати перед виконанням.)*
@@ -314,7 +325,10 @@ See `references/color-extraction.md` for the full apply safety rule set and rati
 
 # Accessibility
 
-Before applying any proposed color system:
+Accessibility validation runs as part of PHASE 2 (before designer confirmation), not just before apply.
+
+Execute via `use_figma`: collect text/background color pairs from actual nodes, calculate contrast ratios,
+report violations. Never rely on manually eyeballing color lists — always compute from node data.
 
 validate contrast for primary body text, secondary body text, large headings, and UI component boundaries.
 
