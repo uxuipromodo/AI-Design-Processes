@@ -94,8 +94,12 @@ The skill determines the workflow from the user's instruction. Each intent runs 
 
 Phases:
 
-1. layout analysis
-2. structure proposal (primitive / semantic / component)
+1. layout analysis — **REQUIRED: run `use_figma` to inspect the file before proposing anything**
+   - Call `use_figma` to discover: existing variable collections, pages, top-level frames
+   - Call `use_figma` separately to find all COMPONENT, COMPONENT_SET, and INSTANCE nodes — these define the component layer scope
+   - Call `use_figma` to collect hardcoded colors, radii, and spacing values from layout nodes
+   - Present all findings as **tables** (colors table, radii table, spacing table, font sizes table, components table)
+2. structure proposal (primitive / semantic / component) — all three layers must be proposed; component layer is always required if COMPONENT/INSTANCE nodes exist
 3. designer confirmation of structure
 4. variable creation
 5. apply review
@@ -274,6 +278,10 @@ The skill returns:
 - apply sequences
 - migration guidance when required
 
+**Formatting rules (mandatory):**
+
+All analysis output — colors, radii, spacing, font sizes, components — must be presented as **markdown tables**, not as lists or inline text. This applies to every phase where values are surfaced to the designer. If a category has more than 3 values, a table is required.
+
 
 # v1 Exclusions
 
@@ -293,13 +301,47 @@ User says: "Create variables for this layout."
 
 Actions:
 
-1. Analyze the layout for reusable roles (backgrounds, text, borders, spacing).
-2. Propose primitive + semantic + component structure.
-3. Wait for designer confirmation of structure.
-4. Create variables in collections (Primitives / Semantics / Components).
-5. Present apply review.
-6. On confirmation, apply variables to layout nodes.
-7. State final status: "applied to N nodes" or "apply declined, task complete."
+1. Run `use_figma` — inspect existing variable collections, pages, top-level frames.
+2. Run `use_figma` — find all COMPONENT, COMPONENT_SET, INSTANCE nodes; collect their names and roles.
+3. Run `use_figma` — collect hardcoded colors, radii, spacing values from layout nodes.
+4. Present findings as tables:
+
+   **Colors**
+   | Hex | Count | Semantic role |
+   |---|---|---|
+   | `#ffffff` | 176 | background/card |
+   | … | … | … |
+
+   **Radii**
+   | Value | Semantic role |
+   |---|---|
+   | 4px | radius/sm |
+   | … | … |
+
+   **Spacing**
+   | Value | Semantic role |
+   |---|---|
+   | 8px | spacing/sm |
+   | … | … |
+
+   **Font sizes**
+   | Value | Semantic role |
+   |---|---|
+   | 12px | typography/size/xs |
+   | … | … |
+
+   **Components found**
+   | Name | Type | Component variable needs |
+   |---|---|---|
+   | Button | COMPONENT_SET | background/primary, text/on-primary |
+   | … | … | … |
+
+5. Propose primitive + semantic + component structure (all three layers).
+6. Wait for designer confirmation of structure.
+7. Create variables in collections (Primitives / Semantics / Components).
+8. Present apply review.
+9. On confirmation, apply variables to layout nodes.
+10. State final status: "applied to N nodes" or "apply declined, task complete."
 
 Result: Three-layer variable system created and bound to the layout (or just created, if apply was declined).
 
