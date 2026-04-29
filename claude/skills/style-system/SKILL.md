@@ -11,6 +11,20 @@ metadata:
   tags: [typography, color, style-audit, figma, design-system]
 ---
 
+# Pre-flight: Load References (BLOCKING)
+
+Before starting any phase, load ALL of the following references:
+
+- [ ] `references/audit-principles.md`
+- [ ] `references/typography-extraction.md`
+- [ ] `references/color-extraction.md`
+- [ ] `references/accessibility-validation.md`
+- [ ] `references/naming-convention.md`
+
+Do NOT proceed to PHASE 1 until all references are loaded.
+
+---
+
 # Style System Builder
 
 Build a normalized typography and color style system from an existing Figma layout.
