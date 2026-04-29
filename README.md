@@ -1,98 +1,64 @@
-# Design Skills for Figma
+# AI Design Processes
 
-Skills — це інструкційні модулі для Claude Code, які дозволяють працювати з Figma системно: витягувати стилі, будувати variables-архітектуру та імпортувати вебсторінки як frames. Claude не робить нічого без твого підтвердження — спочатку показує план, ти погоджуєшся, тоді вносяться зміни.
+Skills для Claude Code: автоматизація роботи з Figma — стилі, variables, імпорт вебсторінок.
 
----
+## Quick Start
 
-## Крок 1 — Встановити Claude Code
-
-Claude Code — це AI-асистент який працює прямо в терміналі. Відкрий Terminal на Mac і виконай по черзі:
-
-**1. Встанови Node.js** (якщо ще не встановлений):
+### 1. Встановити Claude Code
 
 ```bash
-node -v
-```
-
-Якщо бачиш версію — Node вже є, переходь далі. Якщо ні — завантаж з [nodejs.org](https://nodejs.org) і встанови.
-
-**2. Встанови Claude Code:**
-
-```bash
-npm install -g @anthropic-ai/claude-code
-```
-
-**3. Запусти та авторизуйся:**
-
-```bash
+curl -fsSL https://claude.ai/install.sh | bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc
 claude
 ```
 
-Claude Code відкриється прямо в терміналі і попросить увійти через браузер. Після авторизації повернись у термінал — все готово.
+При першому запуску: обери тему → **Log in with Claude account** → авторизуйся в браузері → підтверди системні дозволи macOS (тільки доступ до файлів — фото/контакти/календар відхиляй).
 
-> Наступного разу достатньо відкрити Terminal і написати `claude` — він запуститься одразу.
+> Потрібен платний акаунт: Pro, Max, Team або Enterprise.
 
----
-
-## Крок 2 — Встановити Figma MCP
-
-Figma MCP дає Claude доступ до твоїх файлів у Figma.
-
-**1. Додай сервер:**
+### 2. Встановити Figma MCP
 
 ```bash
 claude mcp add --scope user --transport http figma https://mcp.figma.com/mcp
 ```
 
-**2. Перезапусти Claude Code** — закрий і відкрий знову.
+Перезапусти Claude Code → введи `/mcp` → знайди `figma` → **Authenticate** → **Allow Access** в браузері.
 
-**3. Введи в Claude Code:**
+### 3. Увімкнути MCP у Figma Desktop
+
+У файлі Figma Desktop: `Shift + D` → у правій панелі натисни **Enable desktop MCP server**.
+
+### 4. Встановити офіційні Figma skills
+
+В Claude Code введи запит:
 
 ```
-/mcp
+Встанови офіційні Figma skills з https://github.com/figma/mcp-server-guide у ~/.claude/skills/
 ```
 
-Знайди `figma` у списку і натисни **Authenticate**.
-
-**4.** Відкриється браузер — натисни **Allow Access**.
-
-**5.** Побачиш повідомлення `Authentication successful. Connected to figma` — готово.
-
----
-
-## Крок 3 — Увімкнути MCP сервер у Figma Desktop
-
-Щоб Claude бачив твій Figma файл, потрібно увімкнути вбудований MCP сервер прямо у Figma Desktop.
-
-**1.** Відкрий будь-який файл у **Figma Desktop**
-
-**2.** Натисни `Shift + D` — відкриється Dev Mode
-
-**3.** У правій панелі знайди розділ **MCP server** і натисни **Enable desktop MCP server**
-
-**4.** Server status зміниться на **Enabled** — сервер запущено
-
-
----
-
-## Крок 4 — Встановити skills
-
-Одна команда в терміналі:
+### 5. Встановити UXi skills
 
 ```bash
 git clone https://github.com/uxuipromodo/AI-Design-Processes.git /tmp/ai-skills && bash /tmp/ai-skills/install.sh
 ```
 
-Скрипт автоматично:
-- завантажить репозиторій в `~/.claude/ai-design-skills/`
-- встановить всі skills в `~/.claude/skills/`
-- налаштує автооновлення при кожному старті Claude Code
-
-**Оновлення вручну:**
+### 6. Перевірити встановлення
 
 ```bash
-bash ~/.claude/sync-skills.sh
+ls ~/.claude/skills/
 ```
+
+В Claude Code: `/mcp` (статус `figma`) і `/` (список skills).
+
+---
+
+## Available Skills
+
+- `/style-system` — аналіз і нормалізація стилів у Figma
+- `/full-variables` — побудова variables-архітектури
+- `/import-webpage-to-figma` — імпорт вебсторінок як frame у Figma
+
+[Детальна інструкція →](./README-full.md) · [Notion гайд →](#)
 
 ---
 
