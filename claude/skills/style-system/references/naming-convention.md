@@ -31,9 +31,9 @@ Example:
 
 Correct:
 
-Text / Heading / Semibold 32/110
-Text / Body / Regular 16/150
-Color / Neutral / Gray 500
+Text/Heading/Semibold 32-110
+Text/Body/Regular 16-150
+Color/Neutral/Gray 500
 
 Incorrect:
 
@@ -47,7 +47,18 @@ Blue 2
 
 Format:
 
-Text / Role / Weight Size/LineHeight
+Text/Role/Weight Size-LineHeight
+
+CRITICAL — Figma folder rules:
+- Each `/` in a style name creates a new folder level.
+- Do NOT use spaces around `/` — they become part of the folder name and create visual clutter.
+- Do NOT use `/` between Size and LineHeight — it creates an extra unwanted folder level.
+- Use `-` (hyphen) as the separator between Size and LineHeight.
+
+This means:
+- Two `/` separators → two folder levels: Text → Role → style name
+- Example: `Text/Heading/SemiBold 32-110` → folder `Text` → folder `Heading` → style `SemiBold 32-110` ✅
+- WRONG: `Text / Heading / SemiBold 32/110` → folder `Text ` → folder ` Heading ` → folder ` SemiBold 32` → style `110` ❌
 
 
 Roles:
@@ -60,16 +71,16 @@ Label
 
 Examples:
 
-Text / Heading / Semibold 32/110
-Text / Heading / Semibold 24/120
+Text/Heading/Semibold 32-110
+Text/Heading/Semibold 24-120
 
-Text / Body / Regular 16/150
-Text / Body / Regular 14/150
+Text/Body/Regular 16-150
+Text/Body/Regular 14-150
 
-Text / Action / Medium 16/120
+Text/Action/Medium 16-120
 
-Text / Label / Medium 12/100
-Text / Label / Medium 10/100
+Text/Label/Medium 12-100
+Text/Label/Medium 10-100
 
 
 Never skip role classification.
@@ -77,13 +88,13 @@ Never skip role classification.
 Never use semantic size suffixes (SM, Base, MD, LG, XS) as the final segment.
 
 WRONG:
-- Text / Body / SM ❌
-- Text / Body / Base ❌
-- Text / Heading / LG ❌
-- Text / Action / MD ❌
+- Text/Body/SM ❌
+- Text/Body/Base ❌
+- Text/Heading/LG ❌
+- Text/Action/MD ❌
 
 These suffixes are subjective, ambiguous, and break the naming contract.
-The `Weight Size/LineHeight` format is the only allowed form.
+The `Weight Size-LineHeight` format is the only allowed form.
 If you see a reason to deviate, ask the user before creating any styles.
 
 
@@ -94,12 +105,14 @@ Do not create extra slash nesting for size.
 Use integer values in the visible name.
 
 Represent line-height as percentage-style shorthand derived from the style definition.
+Use `-` (hyphen) as the separator between size and line-height value.
 
 
 Example:
 
-14 with 150% line-height → 14/150
-32 with 110% line-height → 32/110
+14 with 150% line-height → 14-150
+32 with 110% line-height → 32-110
+18 with AUTO line-height → 18-AUTO
 
 
 # Multi-Font Naming Rules
@@ -111,8 +124,8 @@ separate style namespaces per family
 
 Example:
 
-Text / UI / Heading / Semibold 32/110
-Text / Editorial / Heading / Semibold 32/110
+Text/UI/Heading/Semibold 32-110
+Text/Editorial/Heading/Semibold 32-110
 
 
 Do not merge typography systems across font families automatically.
@@ -141,12 +154,25 @@ Do not use numeric weight values in style names unless unavoidable.
 Line-height must appear in the final visible typography style name.
 
 Keep line-height in the last segment together with size.
+Use `-` (hyphen) as the separator between size and line-height — never `/`.
+
+Line-height values in style names are ALWAYS in percentage or AUTO — never pixels.
+If source value is in pixels: convert → round(px / fontSize * 100).
+
+ALLOWED in style names:
+- Text/Heading/Bold 32-137   (137 = percentage)
+- Text/Body/Regular 14-141
+- Text/Action/Medium 16-AUTO
+
+NEVER:
+- Text/Label/Regular 12-16px  ❌  (pixels not allowed)
 
 
 Examples:
 
-Text / Body / Regular 16/150
-Text / Heading / Semibold 32/110
+Text/Body/Regular 16-150
+Text/Heading/Semibold 32-110
+Text/Label/Medium 12-AUTO
 
 
 # Letter Spacing Naming Policy
@@ -159,7 +185,7 @@ UI-specific variants
 
 Example:
 
-Text / Label / 12 / Caps
+Text/Label/12 Caps
 
 
 Ask confirmation before suffix creation.
@@ -169,16 +195,16 @@ Ask confirmation before suffix creation.
 
 Format:
 
-Color / Neutral / Gray Step
+Color/Neutral/Gray Step
 
 
 Examples:
 
-Color / Neutral / White
-Color / Neutral / Gray 50
-Color / Neutral / Gray 100
-Color / Neutral / Gray 500
-Color / Neutral / Gray 800
+Color/Neutral/White
+Color/Neutral/Gray 50
+Color/Neutral/Gray 100
+Color/Neutral/Gray 500
+Color/Neutral/Gray 800
 
 
 Do not use:
@@ -196,20 +222,20 @@ Always prefer numeric scale steps.
 
 Format:
 
-Color / Accent / Name
+Color/Accent/Name
 
 
 Examples:
 
-Color / Accent / Primary
-Color / Accent / Secondary
-Color / Accent / Blue
+Color/Accent/Primary
+Color/Accent/Secondary
+Color/Accent/Blue
 
 
 Avoid:
 
-Color / Blue / 1
-Color / Brand Blue Dark
+Color/Blue/1
+Color/Brand Blue Dark
 
 
 Cluster tonal variations under same accent family.
@@ -217,7 +243,7 @@ Cluster tonal variations under same accent family.
 
 Example:
 
-Color / Accent / Blue
+Color/Accent/Blue
 
 
 Confirm before splitting tonal variants.
@@ -227,7 +253,7 @@ Confirm before splitting tonal variants.
 
 Format:
 
-Color / Semantic / Role
+Color/Semantic/Role
 
 
 Roles:
@@ -240,10 +266,10 @@ Info
 
 Variant naming:
 
-Color / Semantic / Success / Background
-Color / Semantic / Success / Foreground
-Color / Semantic / Success / Border
-Color / Semantic / Success / Icon
+Color/Semantic/Success/Background
+Color/Semantic/Success/Foreground
+Color/Semantic/Success/Border
+Color/Semantic/Success/Icon
 
 
 Never create semantic colors without role suffix.
@@ -253,7 +279,7 @@ Never create semantic colors without role suffix.
 
 Format:
 
-Color / Surface / Role
+Color/Surface/Role
 
 
 Roles:
@@ -266,8 +292,8 @@ Overlay
 
 Example:
 
-Color / Surface / Background
-Color / Surface / Elevated
+Color/Surface/Background
+Color/Surface/Elevated
 
 
 Confirm before generating surface hierarchy.
@@ -277,7 +303,7 @@ Confirm before generating surface hierarchy.
 
 Format:
 
-Color / Border / Role
+Color/Border/Role
 
 
 Roles:
@@ -289,7 +315,7 @@ Strong
 
 Example:
 
-Color / Border / Subtle
+Color/Border/Subtle
 
 
 Cluster similar border colors before naming.
@@ -324,11 +350,11 @@ Creating a parallel style alongside a legacy one produces duplicates and splits 
 
 Example:
 
-Existing: H2 (32px SemiBold) → rename to Text / Heading / SemiBold 32/AUTO
-Existing: Button (16px SemiBold) → rename to Text / Action / SemiBold 16/AUTO
-Existing: Helper 1 (14px SemiBold) → rename to Text / Body / SemiBold 14/AUTO
+Existing: H2 (32px SemiBold) → rename to Text/Heading/SemiBold 32-AUTO
+Existing: Button (16px SemiBold) → rename to Text/Action/SemiBold 16-AUTO
+Existing: Helper 1 (14px SemiBold) → rename to Text/Body/SemiBold 14-AUTO
 
-Do NOT create Text / Heading / SemiBold 32/AUTO as a new style while H2 still exists.
+Do NOT create Text/Heading/SemiBold 32-AUTO as a new style while H2 still exists.
 
 Never rename automatically.
 
@@ -351,7 +377,7 @@ Body Copy
 
 Normalize:
 
-Text / Body / 16
+Text/Body/16
 
 
 Ask confirmation before merge.
@@ -368,7 +394,7 @@ Exception
 
 Example:
 
-Text / Exception / 15
+Text/Exception/15
 
 
 Do not delete automatically.
@@ -388,12 +414,12 @@ Example:
 
 If exists:
 
-Text / Body / 16
+Text/Body/16
 
 
 Do not create:
 
-Text / Paragraph / 16
+Text/Paragraph/16
 
 
 Prefer existing naming anchor.

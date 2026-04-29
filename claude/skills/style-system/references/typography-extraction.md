@@ -309,14 +309,26 @@ Ask confirmation before removal or merge.
 
 # Line Height Extraction Rules
 
+Line-height values are ALWAYS expressed as percentage or AUTO — no exceptions.
+
+ALLOWED: percentage (e.g. 150%, 137%) or AUTO
+NEVER: pixel values
+
+If source node has pixel line-height, convert before using:
+percentage = round(pixelValue / fontSize * 100)
+Example: 16px on 12px font → 133%
+
+This rule applies in ALL contexts: audit output, planning, style naming, style creation.
+
+
 If explicit line height exists:
 
-preserve relationship
+convert to percentage if in pixels, then preserve relationship
 
 
 If Auto line height detected:
 
-infer based on role
+use AUTO — do not convert to a percentage value
 
 
 Heading:

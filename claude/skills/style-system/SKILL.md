@@ -64,12 +64,16 @@ No styles are created or applied before explicit designer confirmation.
 Workflow follows the four-phase audit model:
 
 PHASE 1 — AUDIT
+  *(Збираємо всі значення з файлу, виявляємо проблеми. Жодних змін у файлі не відбувається.)*
 
 PHASE 2 — DESIGNER CONFIRMATION
+  *(Показуємо знахідки і пропозиції. Чекаємо рішення дизайнера по кожному пункту. Без підтвердження — нічого не виконується.)*
 
 PHASE 3 — FINAL VALIDATION
+  *(Перевіряємо що підтверджений план без конфліктів. Останній шанс щось скоригувати перед виконанням.)*
 
 PHASE 4 — APPLY CHANGES
+  *(Виконуємо зміни у файлі — лише після явного "так" від дизайнера.)*
   Step 4.1 — update style system (rename → merge → delete → create)
   Step 4.2 — apply styles to layout nodes
 
@@ -181,6 +185,24 @@ Do not generate purely numeric text styles unless classification is ambiguous.
 
 
 Non-canonical sizes (not divisible by 2px) must stop in planning mode with explicit options. Never snap silently.
+
+
+# Line-Height Rule (ABSOLUTE — no exceptions)
+
+Line-height values are ALWAYS expressed as a percentage or AUTO.
+
+ALLOWED:
+- percentage value, e.g. 150%, 137%, 106%
+- AUTO
+
+NEVER use pixel values for line-height — not in audit output, not in style names, not in style creation.
+
+If a node has a pixel line-height, convert it to percentage before naming or creating the style:
+percentage = round(pixelLineHeight / fontSize * 100)
+
+Example: 16px line-height on 12px font → 16/12*100 = 133%
+
+This rule applies in ALL contexts: audit, planning, naming, style creation.
 
 
 See `references/typography-extraction.md` for:
@@ -322,41 +344,46 @@ See `references/accessibility-validation.md` for:
 
 Typography format:
 
-Text / Role / Weight Size/LineHeight
+Text/Role/Weight Size-LineHeight
 
+CRITICAL — Figma folder rules:
+- Each `/` creates a new folder level in Figma's style panel.
+- Do NOT use spaces around `/` — they become part of the folder name.
+- Do NOT use `/` between Size and LineHeight — use `-` (hyphen) instead.
+- Two `/` separators = two folder levels: Text → Role → style name.
 
 Roles: Heading, Body, Action, Label.
 
 
 Correct examples:
 
-Text / Heading / Semibold 32/110
-Text / Body / Regular 16/150
-Text / Action / Medium 14/120
-Text / Label / Medium 12/100
+Text/Heading/Semibold 32-110
+Text/Body/Regular 16-150
+Text/Action/Medium 14-120
+Text/Label/Medium 12-100
 
 
 Color format:
 
-Color / Layer / Role
+Color/Layer/Role
 
 
 Examples:
 
-Color / Neutral / White
-Color / Neutral / Gray 500
-Color / Accent / Primary
-Color / Semantic / Success
+Color/Neutral/White
+Color/Neutral/Gray 500
+Color/Accent/Primary
+Color/Semantic/Success
 
 
-NEVER use semantic size suffixes (SM, Base, MD, LG, XS) as the final segment. The `Weight Size/LineHeight` format is the only allowed form for typography.
+NEVER use semantic size suffixes (SM, Base, MD, LG, XS) as the final segment. The `Weight Size-LineHeight` format is the only allowed form for typography.
 
 
 WRONG:
 
-- `Text / Body / SM` ❌
-- `Text / Heading / LG` ❌
-- `Text / Action / MD` ❌
+- `Text/Body/SM` ❌
+- `Text/Heading/LG` ❌
+- `Text/Action/MD` ❌
 
 
 Do not generate unnamed styles. Always normalize naming before creation.
@@ -365,7 +392,7 @@ Do not generate unnamed styles. Always normalize naming before creation.
 See `references/naming-convention.md` for:
 
 - full naming philosophy and structure rules
-- multi-font namespacing (Text / UI / … vs Text / Editorial / …)
+- multi-font namespacing (Text/UI/… vs Text/Editorial/…)
 - weight / line-height / letter-spacing naming policies
 - neutral, accent, semantic, surface, and border naming structures
 - legacy style renaming rules (H1, H2, Button, Helper, Heading Large, etc.)
@@ -457,9 +484,9 @@ File contains legacy styles: `H2`, `Button`, `Helper 1`.
 Actions:
 
 1. Map each to its normalized target:
-   - `H2` → `Text / Heading / Semibold 32/AUTO`
-   - `Button` → `Text / Action / Semibold 16/AUTO`
-   - `Helper 1` → `Text / Body / Semibold 14/AUTO`
+   - `H2` → `Text/Heading/Semibold 32-AUTO`
+   - `Button` → `Text/Action/Semibold 16-AUTO`
+   - `Helper 1` → `Text/Body/Semibold 14-AUTO`
 2. Present rename plan in preview.
 3. On confirmation, rename existing styles (preserving all node bindings).
 4. Only then identify remaining gaps and create new styles for those.
@@ -501,7 +528,7 @@ Solution: Skip automatically. Preserve image-bearing nodes unchanged. See `refer
 
 Cause: Designer wants to keep a size not divisible by 2px (e.g., 15px for a specific component).
 
-Solution: Accept the exception. Classify under `Text / Exception / 15` (or role-appropriate exception). Do not force normalization.
+Solution: Accept the exception. Classify under `Text/Exception/15` (or role-appropriate exception). Do not force normalization.
 
 
 ## Contrast validation reports violations
