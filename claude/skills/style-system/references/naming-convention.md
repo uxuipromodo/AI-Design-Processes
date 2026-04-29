@@ -47,18 +47,28 @@ Blue 2
 
 Format:
 
-Text/Role/Weight Size-LineHeight
+Role/Weight Size
 
 CRITICAL — Figma folder rules:
-- Each `/` in a style name creates a new folder level.
+- Each `/` in a style name creates a new folder level in Figma's style panel.
 - Do NOT use spaces around `/` — they become part of the folder name and create visual clutter.
-- Do NOT use `/` between Size and LineHeight — it creates an extra unwanted folder level.
-- Use `-` (hyphen) as the separator between Size and LineHeight.
+- Do NOT use a global `Text/` prefix — Figma already separates text styles from color styles in the panel. Adding `Text/` creates a redundant top-level folder.
+- One `/` separator → one folder level: Role → style name
+- Example: `Heading/Bold 32` → folder `Heading` → style `Bold 32` ✅
+- WRONG: `Text/Heading/Bold 32` → extra top-level `Text` folder ❌
 
-This means:
-- Two `/` separators → two folder levels: Text → Role → style name
-- Example: `Text/Heading/SemiBold 32-110` → folder `Text` → folder `Heading` → style `SemiBold 32-110` ✅
-- WRONG: `Text / Heading / SemiBold 32/110` → folder `Text ` → folder ` Heading ` → folder ` SemiBold 32` → style `110` ❌
+Do NOT include line-height in the style name.
+Line-height is a property of the style definition, not a label. It clutters the panel and becomes outdated when values change.
+
+WRONG:
+- `Heading/Bold 32-106` ❌  (line-height suffix)
+- `Body/Regular 16-150` ❌  (line-height suffix)
+- `Label/Medium 12-AUTO` ❌  (AUTO suffix)
+
+CORRECT:
+- `Heading/Bold 32` ✅
+- `Body/Regular 16` ✅
+- `Label/Medium 12` ✅
 
 
 Roles:
@@ -71,16 +81,26 @@ Label
 
 Examples:
 
-Text/Heading/Semibold 32-110
-Text/Heading/Semibold 24-120
+Heading/Bold 32
+Heading/SemiBold 32
+Heading/Medium 32
+Heading/Bold 26
+Heading/Bold 18
+Heading/ExtraBold 18
 
-Text/Body/Regular 16-150
-Text/Body/Regular 14-150
+Body/Bold 16
+Body/SemiBold 16
+Body/Bold 14
+Body/SemiBold 14
+Body/Medium 14
+Body/Regular 14
 
-Text/Action/Medium 16-120
+Action/SemiBold 16
+Action/Medium 16
 
-Text/Label/Medium 12-100
-Text/Label/Medium 10-100
+Label/SemiBold 12
+Label/Regular 12
+Label/Bold 12
 
 
 Never skip role classification.
@@ -88,31 +108,14 @@ Never skip role classification.
 Never use semantic size suffixes (SM, Base, MD, LG, XS) as the final segment.
 
 WRONG:
-- Text/Body/SM ❌
-- Text/Body/Base ❌
-- Text/Heading/LG ❌
-- Text/Action/MD ❌
+- Body/SM ❌
+- Body/Base ❌
+- Heading/LG ❌
+- Action/MD ❌
 
 These suffixes are subjective, ambiguous, and break the naming contract.
-The `Weight Size-LineHeight` format is the only allowed form.
+The `Weight Size` format is the only allowed form.
 If you see a reason to deviate, ask the user before creating any styles.
-
-
-Keep size and line-height in the final visible segment.
-
-Do not create extra slash nesting for size.
-
-Use integer values in the visible name.
-
-Represent line-height as percentage-style shorthand derived from the style definition.
-Use `-` (hyphen) as the separator between size and line-height value.
-
-
-Example:
-
-14 with 150% line-height → 14-150
-32 with 110% line-height → 32-110
-18 with AUTO line-height → 18-AUTO
 
 
 # Multi-Font Naming Rules
@@ -124,8 +127,8 @@ separate style namespaces per family
 
 Example:
 
-Text/UI/Heading/Semibold 32-110
-Text/Editorial/Heading/Semibold 32-110
+UI/Heading/Bold 32
+Editorial/Heading/Bold 32
 
 
 Do not merge typography systems across font families automatically.
@@ -151,28 +154,21 @@ Do not use numeric weight values in style names unless unavoidable.
 
 # Line Height Naming Policy
 
-Line-height must appear in the final visible typography style name.
+Do NOT include line-height in the style name.
 
-Keep line-height in the last segment together with size.
-Use `-` (hyphen) as the separator between size and line-height — never `/`.
+Line-height is a property stored inside the style definition. It does not belong in the name — it clutters the panel and becomes a maintenance burden when values change.
 
-Line-height values in style names are ALWAYS in percentage or AUTO — never pixels.
-If source value is in pixels: convert → round(px / fontSize * 100).
+WRONG:
+- `Heading/Bold 32-137` ❌
+- `Body/Regular 14-141` ❌
+- `Action/Medium 16-AUTO` ❌
 
-ALLOWED in style names:
-- Text/Heading/Bold 32-137   (137 = percentage)
-- Text/Body/Regular 14-141
-- Text/Action/Medium 16-AUTO
+CORRECT:
+- `Heading/Bold 32` ✅
+- `Body/Regular 14` ✅
+- `Action/Medium 16` ✅
 
-NEVER:
-- Text/Label/Regular 12-16px  ❌  (pixels not allowed)
-
-
-Examples:
-
-Text/Body/Regular 16-150
-Text/Heading/Semibold 32-110
-Text/Label/Medium 12-AUTO
+Set the correct line-height value in the style definition. Never encode it in the name.
 
 
 # Letter Spacing Naming Policy
@@ -195,16 +191,20 @@ Ask confirmation before suffix creation.
 
 Format:
 
-Color/Neutral/Gray Step
+Neutral/Gray Step
 
+Do NOT use a global `Color/` prefix — Figma already separates color styles from text styles in the panel. Adding `Color/` creates a redundant top-level folder.
+
+WRONG: `Color/Neutral/Gray 500` ❌  (extra top-level `Color` folder)
+CORRECT: `Neutral/Gray 500` ✅
 
 Examples:
 
-Color/Neutral/White
-Color/Neutral/Gray 50
-Color/Neutral/Gray 100
-Color/Neutral/Gray 500
-Color/Neutral/Gray 800
+Neutral/White
+Neutral/Gray 50
+Neutral/Gray 100
+Neutral/Gray 500
+Neutral/Gray 800
 
 
 Do not use:
@@ -222,20 +222,24 @@ Always prefer numeric scale steps.
 
 Format:
 
-Color/Accent/Name
+Accent/Name
 
+Do NOT use a global `Color/` prefix.
+
+WRONG: `Color/Accent/Primary` ❌
+CORRECT: `Accent/Primary` ✅
 
 Examples:
 
-Color/Accent/Primary
-Color/Accent/Secondary
-Color/Accent/Blue
+Accent/Primary
+Accent/Secondary
+Accent/Blue
 
 
 Avoid:
 
-Color/Blue/1
-Color/Brand Blue Dark
+Blue/1
+Brand Blue Dark
 
 
 Cluster tonal variations under same accent family.
@@ -243,7 +247,9 @@ Cluster tonal variations under same accent family.
 
 Example:
 
-Color/Accent/Blue
+Accent/Blue
+Accent/Blue Dark
+Accent/Blue Light
 
 
 Confirm before splitting tonal variants.
@@ -253,8 +259,12 @@ Confirm before splitting tonal variants.
 
 Format:
 
-Color/Semantic/Role
+Semantic/Role
 
+Do NOT use a global `Color/` prefix.
+
+WRONG: `Color/Semantic/Error` ❌
+CORRECT: `Semantic/Error` ✅
 
 Roles:
 
@@ -266,10 +276,10 @@ Info
 
 Variant naming:
 
-Color/Semantic/Success/Background
-Color/Semantic/Success/Foreground
-Color/Semantic/Success/Border
-Color/Semantic/Success/Icon
+Semantic/Success/Background
+Semantic/Success/Foreground
+Semantic/Success/Border
+Semantic/Success/Icon
 
 
 Never create semantic colors without role suffix.
@@ -279,8 +289,12 @@ Never create semantic colors without role suffix.
 
 Format:
 
-Color/Surface/Role
+Surface/Role
 
+Do NOT use a global `Color/` prefix.
+
+WRONG: `Color/Surface/Background` ❌
+CORRECT: `Surface/Background` ✅
 
 Roles:
 
@@ -292,8 +306,8 @@ Overlay
 
 Example:
 
-Color/Surface/Background
-Color/Surface/Elevated
+Surface/Background
+Surface/Elevated
 
 
 Confirm before generating surface hierarchy.
@@ -303,8 +317,12 @@ Confirm before generating surface hierarchy.
 
 Format:
 
-Color/Border/Role
+Border/Role
 
+Do NOT use a global `Color/` prefix.
+
+WRONG: `Color/Border/Subtle` ❌
+CORRECT: `Border/Subtle` ✅
 
 Roles:
 
@@ -315,7 +333,9 @@ Strong
 
 Example:
 
-Color/Border/Subtle
+Border/Subtle
+Border/Default
+Border/Strong
 
 
 Cluster similar border colors before naming.
